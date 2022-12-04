@@ -35,7 +35,7 @@ import { TokenState } from "../state/token";
 import { AxiosResponse } from "axios";
 import { FlatGrid } from "react-native-super-grid";
 import { localDate } from "../service/date";
-
+import Style from "./screen.style";
 
 export default function Home({ navigation }: AppStackProps<"Home">) {
 	const userState = UserState.useState()
@@ -171,7 +171,7 @@ export default function Home({ navigation }: AppStackProps<"Home">) {
 	});
 
 	return (
-		<ImageBackground style={{ height: '100%', width: '100%', flex: 1 }} source={require('../assets/images/backgrounds/bg_gradient_blue.png')}>
+		<ImageBackground style={Style.imageBackground} source={require('../assets/images/backgrounds/bg_gradient_blue.png')}>
 			<StatusBar backgroundColor={'transparent'} translucent={true}></StatusBar>
 			{!interact
 				? <Loading />

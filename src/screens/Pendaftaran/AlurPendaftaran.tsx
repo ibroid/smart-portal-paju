@@ -21,7 +21,7 @@ import Style from "../screen.style";
 export default function AlurPendaftaran({ navigation }: PendaftaranStackProps<"AlurPendaftaran">) {
 
     const linkToGugatanMandiri = async () => {
-        const url = "https://sarbiati.pa-jakartautara.go.id"
+        const url = "https://sarbiati.pajakartautara.id"
         const supported = await Linking.canOpenURL(url);
         if (supported) {
             await Linking.openURL(url);

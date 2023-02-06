@@ -81,6 +81,7 @@ export default function Home({ navigation }: AppStackProps<"Home">) {
 				setInteract(false)
 				setNomorAntrian(0)
 				setDateNow('')
+				setTimeNow('')
 			};
 		}, [loading])
 	);

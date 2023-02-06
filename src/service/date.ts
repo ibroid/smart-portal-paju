@@ -3,7 +3,7 @@ import 'moment/locale/id';
 
 export function localDate(date: Date | string | null | undefined) {
     if (!date) return 'Belum Putus';
-    return moment(date).locale('id').format('dddd, DD MMMM YYYY');
+    return moment(date, 'YYYY-MM-DD').locale('id').format('dddd, DD MMMM YYYY');
 }
 
 export function dateDiff(startDate: Date | string, endDate: Date | string) {

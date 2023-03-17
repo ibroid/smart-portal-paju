@@ -1,148 +1,122 @@
-import React, { useEffect, useState } from "react";
-import DefaultHeader from "../components/DefaultHeader";
-import {
-	View,
-	Text,
-	ImageBackground,
-	InteractionManager,
-	ActivityIndicator,
-	ScrollView,
-	Alert
-} from "react-native"
+import * as React from "react";
+import { View, Text, Badge, Box, Flex, HStack, Pressable, Spacer, Center, Hidden, Image, Stack, VStack, ScrollView, StatusBar, Divider } from "native-base";
 
-import { LocaleConfig, Calendar } from 'react-native-calendars';
-import { dateDiff, localDate } from "../service/date";
-import { useFocusEffect } from '@react-navigation/native';
-import { AppStackProps } from "../interfaces/IStackParams";
-import { ISidangResponse } from "../interfaces/IResponse";
-import { TokenState } from "../state/token";
-import Style from "./screen.style";
+import useHttp from "../hooks/useHttp";
+import { ISidangResponse } from "../interfaces/ResponseInterface";
+import { useFocusEffect } from "@react-navigation/native";
+import { Alert, ImageBackground } from "react-native";
+import Splash from "./Splash";
+import { dateDiff, localDate } from "../utility/Dates";
+import { useNavigation } from "@react-navigation/native";
 
-import useHttpRequest from "../hooks/useHttpRequest";
-import FaIcon from "react-native-vector-icons/FontAwesome5";
-import MatIcon from "react-native-vector-icons/MaterialIcons";
-
-export default function JadwalSidang({ navigation }: AppStackProps<"JadwalSidang">) {
-
-	const [interactionStatus, setInteractionStatus] = useState<boolean>(false);
-	const tokenState = TokenState.useState();
-
-	const [tglSidang, setTglSidang] = useState<any>({})
-	const { data, loading, error, errorMessage } = useHttpRequest<ISidangResponse[]>('/user/jadwal_sidang', tokenState.access);
-
-	useFocusEffect(
-		React.useCallback(() => {
-			if (error && errorMessage) {
-				console.log(errorMessage)
-				Alert.alert("Terjadi Kesalahan", "Mohon maaf saat ini layanan sidang tidak bisa diakses. Error : " + errorMessage.message, [
-					{
-						"text": "Kembali",
-						"onPress": () => navigation.goBack()
-					}
-				])
-			}
-
-
-
-			if (!loading) {
-
-
-				InteractionManager.runAfterInteractions(() => {
-					setInteractionStatus(true)
-				})
-
-				const markDate: any = {}
-				if (data && !loading) {
-					data.forEach(elemenet => {
-						markDate[elemenet.tanggal_sidang] = { selected: true, selectedColor: (dateDiff(new Date, elemenet.tanggal_sidang) <= 0) ? '#6a48bd' : "#ff5768" }
-					})
-					setTglSidang(markDate)
+export default function JadwalSidang({ props }: any) {
+	const { data, loading, error, errorMessage } = useHttp<ISidangResponse[]>('user/jadwal_sidang');
+	const navigation = useNavigation();
+	useFocusEffect(React.useCallback(() => {
+		console.log(data)
+		if (error && errorMessage) {
+			// console.log(errorMessage)
+			Alert.alert("Terjadi Kesalahan", "Mohon maaf saat ini layanan cek biaya tidak bisa diakses. Error : " + errorMessage.message, [
+				{
+					"text": "Kembali",
+					"onPress": () => navigation.goBack()
 				}
-			}
+			])
+		}
 
-			return () => {
-				setInteractionStatus(false)
-				setTglSidang({});
-			};
-
-		}, [loading])
-	)
-
-	LocaleConfig.locales['fr'] = {
-		monthNames: [
-			'Januari',
-			'Februari',
-			'Maret',
-			'April',
-			'Mei',
-			'Juni',
-			'Juli',
-			'Agustus',
-			'September',
-			'Oktober',
-			'November',
-			'Desember',
-		],
-		monthNamesShort: ['Jan', 'Feb', 'Maer', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
-		dayNames: ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jum\'at', 'Sabtu'],
-		dayNamesShort: ['Min.', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab.'],
-		today: "hari Ini"
-	};
-	LocaleConfig.defaultLocale = 'fr';
-
-	function HariSidangCard(props: { item: ISidangResponse }) {
-		const i = props.item;
-		return (
-			<View key={i.id} style={{ backgroundColor: '#fff', borderRadius: 10, flexDirection: 'row', marginBottom: 10 }}>
-				<View style={{ backgroundColor: (dateDiff(new Date, i.tanggal_sidang) <= 0) ? '#6a48bd' : "#ff5768", width: 10 }}></View>
-				<View style={{ padding: 10 }}>
-					<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-						<FaIcon name="calendar" style={{ marginRight: 5 }} />
-						<Text>{localDate(i.tanggal_sidang)}</Text>
-					</View>
-					<View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 5 }}>
-						<FaIcon name="clock" style={{ marginRight: 5 }} />
-						<Text>09:00 - 10:00 AM</Text>
-					</View>
-					<View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 5 }}>
-						<Text style={{ fontSize: 20, color: 'black', marginBottom: -5 }}>Sidang Ke {i.urutan}</Text>
-					</View>
-					<Text style={{ fontSize: 15 }}>{i.agenda}</Text>
-					<View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 5 }}>
-						<FaIcon name="building" style={{ marginRight: 5 }} />
-						<Text>Ruang Sidang {i.ruangan}</Text>
-					</View>
-				</View>
-			</View>)
-	}
+	}, [loading]))
 
 	return (
-		<ImageBackground style={Style.imageBackground} source={require('../assets/images/backgrounds/bg_gradient_blue_2.png')}>
-			<DefaultHeader name="Jadwal Sidang" />
-			{(!interactionStatus && loading) ? <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}><ActivityIndicator size={'large'} color={'#fff'} /></View> :
-				<ScrollView style={{ flex: 1, flexDirection: 'column' }}>
-					<View style={{ paddingHorizontal: 20, marginTop: 20 }}>
-						<View style={{ marginBottom: 10 }}>
-							<Text style={{ marginLeft: 20, color: '#fff' }}>Hari Ini</Text>
-							<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-								<Text style={{ color: '#fff', flex: 1, fontWeight: '600', fontSize: 20, marginLeft: 20 }}>{localDate(new Date)}</Text>
-							</View>
-						</View>
-						<Calendar markedDates={tglSidang} style={{ borderRadius: 20, height: 400 }} />
-						<View style={{ flexDirection: 'column', margin: 10 }}>
-							<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-								<MatIcon name="circle" size={30} color="#ff5768" />
-								<Text style={{ marginLeft: 10, color: '#fff' }}>Persidangan yang lalu</Text>
-							</View>
-							<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-								<MatIcon name="circle" size={30} color="#6a48bd" />
-								<Text style={{ marginLeft: 10, color: '#fff' }}>Persidangan yang akan datang</Text>
-							</View>
-						</View>
-						{data?.map((value) => <HariSidangCard key={value.id} item={value} />)}
-					</View>
-				</ScrollView>
-			}
-		</ImageBackground>
+		<>
+			<StatusBar
+				translucent
+				backgroundColor="transparent"
+				barStyle="dark-content"
+			/>
+			<ImageBackground
+				source={require('../assets/images/backgrounds/bg_gradient_blue.png')}
+				style={{ flex: 1, marginHorizontal: "auto" }}
+			>
+				<Stack
+					flexDirection={{ base: "column", md: "row" }}
+					w="100%"
+					maxW={{ md: "1016px" }}
+					flex={{ base: "1", md: "none" }}
+				>
+					<Hidden from="md">
+						<VStack px="4" mt="4" mb="5" space="2">
+							<Text color="coolGray.50" fontSize="lg">
+								Jadwal Sidang
+							</Text>
+							<VStack space="2">
+								<Text fontSize="xl" fontWeight="bold" color="coolGray.50">
+									Berikut jadwal sidang anda
+								</Text>
+							</VStack>
+						</VStack>
+					</Hidden>
+					<ScrollView
+						contentContainerStyle={{
+							flexGrow: 1,
+						}}
+						style={{ flex: 1 }}
+					>
+						<VStack
+							flex="1"
+							px="6"
+							py="6"
+							_light={{ bg: "white" }}
+							_dark={{ bg: "coolGray.800" }}
+							space="3"
+							borderTopRightRadius={{ base: "2xl", md: "xl" }}
+							borderBottomRightRadius={{ base: "0", md: "xl" }}
+							borderTopLeftRadius={{ base: "2xl", md: "0" }}
+						>
+							{loading ? <Splash /> : (data?.map((row, i) => {
+								return <Box key={++i} alignItems="center">
+									<Pressable >
+										{({
+											isHovered,
+											isFocused,
+											isPressed
+										}) => {
+											return <Box width={350} bg={isPressed ? "coolGray.200" : isHovered ? "coolGray.200" : "coolGray.100"} style={{
+												transform: [{
+													scale: isPressed ? 0.96 : 1
+												}]
+											}} p="5" rounded="8" shadow={3} borderWidth="1" borderColor="coolGray.300">
+												<HStack alignItems="center">
+													<Badge colorScheme={dateDiff(new Date(), row.tanggal_sidang) <= 0 ? "success" : "danger"} _text={{
+														color: "white"
+													}} variant="solid" rounded="4">
+														{dateDiff(new Date(), row.tanggal_sidang) <= 0 ? 'Yang Akan Datang' : 'Berlalu'}
+													</Badge>
+													<Spacer />
+													<Text fontSize={10} color="coolGray.800">
+														{localDate(row.tanggal_sidang)}
+													</Text>
+												</HStack>
+												<Text color="coolGray.800" mt="3" fontWeight="medium" fontSize="xl">
+													{row.agenda}
+												</Text>
+												<Text mt="2" fontSize="sm" color="coolGray.700">
+													Ruangan : Ruang Sidang {row.ruangan}
+												</Text>
+												<Text fontSize="sm" color="coolGray.700">
+													Alasan Tunda : {row.alasan_ditunda == 0 ? 'Tidak Ditunda' : row.alasan_ditunda}
+												</Text>
+											</Box>;
+										}}
+									</Pressable>
+								</Box>
+							}))
+
+							}
+							<Divider mt={20} />
+						</VStack>
+					</ScrollView>
+				</Stack>
+			</ImageBackground>
+		</>
 	)
 }

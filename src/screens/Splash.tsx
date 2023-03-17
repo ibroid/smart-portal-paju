@@ -1,22 +1,14 @@
-import { Image } from "@rneui/base";
-import React from "react";
-import { View, ImageBackground, Text, StatusBar, ActivityIndicator } from "react-native";
-
-import Styles from "./screen.style";
+import { Text, View, Spinner } from "native-base";
+import * as React from "react";
+import { Image } from "react-native";
 
 export default function Splash() {
     return (
-        <ImageBackground style={Styles.imageBackground} source={require('../assets/images/backgrounds/bg_gradient_blue.png')}>
-            <StatusBar barStyle={'light-content'} backgroundColor={'transparent'} translucent={true}></StatusBar>
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <View style={{ padding: 10 }}>
-                    <Text style={{ color: '#fff', fontSize: 20, textAlign: 'center', fontWeight: '600' }}>Selamat Datang Di Aplikasi Sarana Bantuan Informasi Akurat Terintegrasi</Text>
-                    <Text style={{ color: '#fff', textAlign: 'center' }}>Pengadilan Agama Jakarta Utara</Text>
-                </View>
-                <ActivityIndicator size={'large'} color={'#fff'} />
-
-            </View>
-        </ImageBackground>
-
+        <View style={{ justifyContent: 'center', flex: 1, alignItems: 'center' }}>
+            <Image style={{ width: 400, height: 300 }} resizeMode={"stretch"} source={require("../assets/images/undraw_File_sync_re_0pcx.png")} />
+            <Spinner size={"lg"} />
+            <Text bold fontSize={"md"}>Mohon Tunggu</Text>
+            <Text bold fontSize={"lg"}>Sedang Memeriksa Jaringan</Text>
+        </View >
     )
 }

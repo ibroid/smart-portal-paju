@@ -9,22 +9,19 @@ import {
 	VStack,
 	Text,
 	Link,
-	Divider,
 	Icon,
 	IconButton,
-	useColorModeValue,
 	Hidden,
 	Center,
 	StatusBar,
 	Box,
 	Stack,
 	Select,
+	Input,
 	useToast,
 } from "native-base";
-import AntDesign from "react-native-vector-icons/AntDesign";
-import Entypo from "react-native-vector-icons/Entypo";
 
-import FloatingLabelInput from "../components/FloatingLabelInput";
+import AntDesign from "react-native-vector-icons/AntDesign";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { IFormSignUp } from "../interfaces/FormInterface"
 import { kodeSatker } from "../backend.json";
@@ -34,66 +31,56 @@ import { IRegisterResponse } from "../interfaces/ResponseInterface";
 import ScreenLoading from "../components/ScreenLoading";
 import HttpRequest from "../utility/HttpRequest";
 import * as qs from "qs";
+import { useForm, useController, Control } from "react-hook-form";
+import InputDefault from "../components/InputDefault";
+import SelectDefault from "../components/SelectDefault";
+
+
 
 function SignUpForm({ props }: any) {
 
 	const { authContext } = React.useContext(AuthContext);
 	const toast = useToast();
 	const [sudahDaftar, setSudahMendaftar] = useState<boolean>(false);
-	const [errMessage, setErrMessage] = useState<string>('');
-	const [loading, setLoading] = useState<boolean>(false)
-	const [showPass, setShowPass] = React.useState(false);
-	const [years, setYears] = React.useState<number[]>(() => {
+	const [loading, setLoading] = useState<boolean>(false);
+
+	const [years, setYears] = React.useState<any[]>(() => {
 		const date = new Date();
-		const arr: number[] = [2023];
+		const arr: any[] = [{
+			name: '2023',
+			value: '2023'
+		}];
 		for (let i = 1; i < 7; i++) {
-			arr.push(date.getFullYear() - i);
+			arr.push({
+				value: `${date.getFullYear() - i}`,
+				name: `${date.getFullYear() - i}`
+			});
 		}
 		return arr;
 	});
 
-	const [inputNamaLengkap, setInputNamaLengkap] = useState<string>('');
-	const [inputNomorTelepon, setInputNomorTelepon] = useState<string>('');
-	const [inputPassword, setInputPassword] = useState<string>('');
-	const [inputNomorPerkara, setInputNomorPerkara] = useState<string>('');
-	const [inputJenisPerkara, setInputJenisPerkara] = useState<string>('');
-	const [inputTahunPerkara, setInputTahunPerkara] = useState<string>('');
+	const { handleSubmit, control } = useForm();
 
-
-	const submitForm = () => {
-		if (
-			!inputNomorTelepon ||
-			!inputNamaLengkap ||
-			!inputPassword
-			// !formValue.nomor_perkara ||
-			// !formValue.jenis ||
-			// !formValue.tahun
-		) {
-			// return setErrMessage("Silahkan Lengkapi Form Dibawah ini")
-			return toast.show({
-				title: 'Peringatan',
-				description: 'Silahkan lengkapi form daftar',
-				variant: 'solid',
-				backgroundColor: 'red.500',
-				placement: 'top',
-			})
-		}
+	const submitForm = (data: any) => {
 
 		setLoading(true)
 		HttpRequest.setHeaderXForm();
 		HttpRequest.request.post('auth/register', qs.stringify({
-			phone: inputNomorTelepon,
-			password: inputPassword,
-			nomor_perkara: `${inputNomorPerkara}/${inputJenisPerkara}/${inputTahunPerkara}/${kodeSatker}`,
-			name: inputNamaLengkap
+			phone: data.nomorTelepon,
+			password: data.password,
+			nomor_perkara: `${data.nomorPerkara}/${data.jenisPerkara}/${data.tahunPerkara}/${kodeSatker}`,
+			name: data.namaLengkap
 		}))
 			.then((res: AxiosResponse<IRegisterResponse>) => {
-				Alert.alert('Notifikasi', res.data.message, [
-					{
-						text: 'Ok !',
-						onPress: () => authContext.signUp(res.data.token)
+				toast.show({
+					title: 'Notifikasi',
+					description: res.data.message,
+					duration: 3000,
+					bgColor: "amber.500",
+					onCloseComplete() {
+						authContext.signUp(res.data.token);
 					}
-				])
+				})
 			})
 			.catch((err: AxiosError<any>) => {
 				let errMsg: string = "";
@@ -113,9 +100,14 @@ function SignUpForm({ props }: any) {
 							errMsg += `${row}, `;
 						})
 					}
-					setErrMessage(errMsg);
 				}
-				Alert.alert('Terjadi Kesalahan .' + err.response?.data.status || err.message, 'Error. ' + err.response?.data.message)
+				toast.show({
+					title: 'Terjadi Kesalahan',
+					description: `${errMsg + err.response?.data.status + err.message + err.response?.data.message}`,
+					duration: 3000,
+					bgColor: "red.500"
+				})
+
 			})
 			.finally(() => {
 				setLoading(false)
@@ -150,82 +142,9 @@ function SignUpForm({ props }: any) {
 					<VStack>
 						<VStack space="6">
 							<VStack space={{ base: "6", md: "4" }}>
-								<Text textAlign={'center'} color={'red.500'} bold>{errMessage}</Text>
-								<FloatingLabelInput
-									isRequired
-									label="Nama Lengkap"
-									labelColor="#9ca3af"
-									labelBGColor={useColorModeValue("#fff", "#1f2937")}
-									borderRadius="4"
-									defaultValue={inputNamaLengkap}
-									onChangeText={(txt: string) => setInputNamaLengkap(txt)}
-									_text={{
-										fontSize: "sm",
-										fontWeight: "medium",
-									}}
-									_dark={{
-										borderColor: "coolGray.700",
-									}}
-									_light={{
-										borderColor: "coolGray.300",
-									}}
-								/>
-								<FloatingLabelInput
-									isRequired
-									label="Nomor Telepon"
-									labelColor="#9ca3af"
-									labelBGColor={useColorModeValue("#fff", "#1f2937")}
-									borderRadius="4"
-									defaultValue={inputNomorTelepon}
-									onChangeText={(txt: string) => setInputNomorTelepon(txt)}
-									_text={{
-										fontSize: "sm",
-										fontWeight: "medium",
-									}}
-									_dark={{
-										borderColor: "coolGray.700",
-									}}
-									_light={{
-										borderColor: "coolGray.300",
-									}}
-								/>
-								<FloatingLabelInput
-									isRequired
-									type={showPass ? "" : "password"}
-									label="Password"
-									borderRadius="4"
-									labelColor="#9ca3af"
-									labelBGColor={useColorModeValue("#fff", "#1f2937")}
-									defaultValue={inputPassword}
-									onChangeText={(txt: string) => setInputPassword(txt)}
-									InputRightElement={
-										<IconButton
-											variant="unstyled"
-											icon={
-												<Icon
-													size="4"
-													color="coolGray.400"
-													as={Entypo}
-													name={showPass ? "eye-with-line" : "eye"}
-												/>
-											}
-											onPress={() => {
-												setShowPass(!showPass);
-											}}
-										/>
-									}
-									_text={{
-										fontSize: "sm",
-										fontWeight: "medium",
-									}}
-									_dark={{
-										borderColor: "coolGray.700",
-									}}
-									_light={{
-										borderColor: "coolGray.300",
-									}}
-								/>
-								<Divider />
+								<InputDefault control={control} name={"namaLengkap"} placeholder="Masukan Nama Lengkap" />
+								<InputDefault control={control} name={"nomorTelepon"} placeholder="Masukan Nomor Telepon. Contoh  08XXXX" />
+								<InputDefault control={control} name={"password"} placeholder="Masukan Nomor Password" isPass={true} />
 								<Checkbox
 									alignItems="flex-start"
 									onChange={(isSelected) => setSudahMendaftar(isSelected)}
@@ -257,47 +176,25 @@ function SignUpForm({ props }: any) {
 								</Checkbox>
 								{sudahDaftar ?
 									<VStack space={3}>
-										<FloatingLabelInput
-											isRequired
-											label="Nomor Perkara"
-											borderRadius="4"
-											labelColor="#9ca3af"
-											labelBGColor={useColorModeValue("#fff", "#1f2937")}
-											defaultValue={inputNomorPerkara}
-											onChangeText={(txt: string) => setInputNomorPerkara(txt)}
-											_text={{
-												fontSize: "sm",
-												fontWeight: "medium",
-											}}
-											_dark={{
-												borderColor: "coolGray.700",
-											}}
-											_light={{
-												borderColor: "coolGray.300",
-											}}
-										/>
+										<InputDefault placeholder="Masukan Nomor Perkara (Awal nya saja)" name={"nomorPerkara"} control={control} />
 										<HStack space={6} direction="row">
-											<Select w={40}
-												selectedValue={inputJenisPerkara}
-												accessibilityLabel="Pilih" placeholder="Pilih Jenis Perkara"
-												onValueChange={itemValue => setInputJenisPerkara(itemValue)}>
-												<Select.Item label="Pdt.G" value="Pdt.G" />
-												<Select.Item label="Pdt.P" value="Pdt.P" />
-											</Select>
-
-											<Select w={40}
-												selectedValue={inputTahunPerkara}
-												accessibilityLabel="Pilih" placeholder="Pilih Tahun"
-												onValueChange={itemValue => setInputTahunPerkara(itemValue)}>
-												{years.map((val) => <Select.Item key={val} label={String(val)} value={String(val)} />)}
-											</Select>
-
+											<SelectDefault
+												control={control}
+												name="jenisPerkara"
+												placeholder="Jenis Perkara"
+												data={[
+													{ name: 'Pdt.P', value: 'Pdt.P' },
+													{ name: 'Pdt.G', value: 'Pdt.G' }
+												]} />
+											<SelectDefault
+												control={control}
+												name="tahunPerkara"
+												placeholder="Tahun Perkara"
+												data={years} />
 										</HStack>
 									</VStack> : <View></View>}
 
 							</VStack>
-
-
 							<Button
 								isLoading={loading}
 								isLoadingText="Mohon Tunggu"
@@ -313,7 +210,14 @@ function SignUpForm({ props }: any) {
 								_dark={{
 									bg: "amber.700"
 								}}
-								onPress={submitForm}
+								onPress={handleSubmit(submitForm, () => {
+									toast.show({
+										title: 'Terjadi Kesalahan',
+										description: 'Silahkan Lengkapi Form',
+										duration: 2000,
+										bgColor: "red.500"
+									})
+								})}
 							>
 								DAFTAR
 							</Button>

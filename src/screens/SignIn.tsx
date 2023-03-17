@@ -26,9 +26,12 @@ import { AxiosError, AxiosResponse } from "axios";
 import { namaSatker } from "../backend.json";
 import { Alert, ImageBackground } from "react-native";
 import { ILoginResponse } from "../interfaces/ResponseInterface";
+import { useForm } from "react-hook-form";
+import InputDefault from "../components/InputDefault";
 
 export function SignInForm({ props }: any) {
-	// add next router here
+
+	const { handleSubmit, control } = useForm()
 	const { authContext } = useContext(AuthContext);
 	const toast = useToast();
 	const [loading, setLoading] = useState<boolean>(false)
@@ -106,27 +109,7 @@ export function SignInForm({ props }: any) {
 				<VStack space="2">
 					<VStack space={{ base: "5", md: "4" }}>
 						<Text textAlign={'center'} color={'red.500'} bold>{errMessage}</Text>
-						<FloatingLabelInput
-							isRequired
-							label="Nomor Telepon"
-							labelColor="#9ca3af"
-							labelBGColor={useColorModeValue("#fff", "#1f2937")}
-							borderRadius="4"
-							defaultValue={formValue?.telepon}
-							onChangeText={(txt: string) => setFormValue(ress => {
-								return { ...ress, telepon: txt }
-							})}
-							_text={{
-								fontSize: "sm",
-								fontWeight: "medium",
-							}}
-							_dark={{
-								borderColor: "coolGray.700",
-							}}
-							_light={{
-								borderColor: "coolGray.300",
-							}}
-						/>
+						<InputDefault name="nomorTelepon" control={control} placeholder="Masukan Nomor Telepon" />
 						<FloatingLabelInput
 							isRequired
 							type={showPass ? "" : "password"}

@@ -1,8 +1,8 @@
-import { Center, Text, Pressable, View, Box, StatusBar, useToast, Divider } from "native-base";
+import { Center, Text, Pressable, View, Box, StatusBar, useToast, Divider, Alert, VStack, HStack, IconButton, CloseIcon } from "native-base";
 import * as React from "react";
 import { FlatList, Image, ImageBackground, StyleSheet } from "react-native";
 import { FlatGrid, SectionGrid } from "react-native-super-grid";
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { NavigationProp, useFocusEffect, useNavigation } from '@react-navigation/native';
 import { Dimensions } from "react-native";
 import { AuthContext } from "../context/AuthContext";
 
@@ -20,15 +20,17 @@ export default function Beranda({ props }: any) {
 			justifyContent: 'flex-end',
 			borderRadius: 5,
 			padding: 5,
-			height: 150,
+			height: 'auto',
 		},
 		itemName: {
 			fontSize: 16,
 			color: '#fff',
+			textAlign: 'center',
 			fontWeight: '600',
 		},
 		itemCode: {
 			// botttom: -10,
+			textAlign: 'center',
 			fontWeight: '600',
 			fontSize: 12,
 			color: '#fff',
@@ -96,19 +98,19 @@ export default function Beranda({ props }: any) {
 		},
 		{
 			name: 'Hitung Biaya',
-			code: '#2F4C5C',
+			code: '#E9CE68',
 			icon: require('../assets/icons/calculator-96x96-2126922.png'),
 			move: "Hitung Biaya"
 		},
 		{
 			name: 'Antrian',
-			code: '#2F4C5C',
+			code: '#A08CC5',
 			icon: require('../assets/icons/id-card-96x96-2126913.png'),
 			move: "Antrian"
 		},
 		{
 			name: 'Sidang Keliling',
-			code: '#2F4C5C',
+			code: '#A0CE68',
 			icon: require('../assets/icons/bell-96x96-2126927.png'),
 			move: "Sidang Keliling"
 		},
@@ -127,20 +129,51 @@ export default function Beranda({ props }: any) {
 			/>
 			<ImageBackground source={require('../assets/images/backgrounds/bg_gradient_blue.png')}
 				style={{ flex: 1 }} >
-				{/* <View bgColor={"#008080"}>
-				<Text m={3} alignSelf={"center"} color={"#fff"} fontSize={"xl"} bold>Beranda</Text>
-			</View> */}
-				<SectionGrid
-					// contentContainerStyle={{ marginBottom: 50 }}
-
-					ListHeaderComponent={
-						<View style={{ backgroundColor: '#fff', borderRadius: 10, margin: 10, padding: 10, flexDirection: 'row' }}>
-							<View style={{ flexDirection: 'column', width: 120, flex: 1 }}>
-								<Text style={{ fontFamily: 'Roboto-Bold', fontSize: 20, color: '#704776' }}>Smart Portal Pengadilan Agama Jakarta Utara</Text>
-							</View>
-							<Image resizeMode="center" style={{ height: 70, width: 150 }} source={require('../assets/images/cs_man.png')}></Image>
+				<View style={{ margin: 10, borderRadius: 10, padding: 10, flexDirection: 'row' }}>
+					<View style={{ flexDirection: 'column', width: 120, flex: 1 }}>
+						<Text style={{ fontFamily: 'NexaHeavy', fontSize: 20, color: '#fff' }}>Smart Portal Pengadilan Agama Jakarta Utara</Text>
+					</View>
+					<Image resizeMode="cover" style={{ height: 70, width: 150 }} source={require('../assets/images/cs_man.png')}></Image>
+				</View>
+				<FlatList
+					style={{ maxHeight: 130 }}
+					data={[
+						require('../assets/images/banner/banner_selamat_datang.png'),
+						require('../assets/images/banner/banner_anti_gratifikasi.png'),
+						require('../assets/images/banner/banner_maklumat.png'),
+						require('../assets/images/banner/banner_corona.png'),
+						require('../assets/images/banner/banner_laporkan.png'),
+					]}
+					horizontal
+					renderItem={({ item }) => {
+						return <View>
+							<Image style={{ width: Dimensions.get('window').width, height: 125 }} resizeMode={"stretch"} resizeMethod={"auto"} source={item} />
 						</View>
-					}
+					}}
+				/>
+				<Alert maxW="400" status="success" colorScheme="light" m={1}>
+					<VStack space={2} flexShrink={1} w="100%">
+						<HStack flexShrink={1} space={2} alignItems="center" justifyContent="space-between">
+							<HStack flexShrink={1} space={2} alignItems="center">
+								<Alert.Icon />
+								<Text fontSize="md" fontWeight="medium" color="coolGray.800">
+									Assalamualaikum
+								</Text>
+							</HStack>
+							<IconButton variant="unstyled" _focus={{
+								borderWidth: 0
+							}} icon={<CloseIcon size="3" />} _icon={{
+								color: "coolGray.600"
+							}} />
+						</HStack>
+						<Box pl="6" _text={{
+							color: "coolGray.600"
+						}}>
+							Selamat Datang
+						</Box>
+					</VStack>
+				</Alert>
+				<SectionGrid
 					sections={[
 						{
 							title: 'Menu Perkara',
@@ -151,14 +184,14 @@ export default function Beranda({ props }: any) {
 							data: items.slice(7, 12),
 						}
 					]}
-					itemDimension={90}
+					itemDimension={60}
 					data={items}
 					style={styles.gridView}
 
-					maxItemsPerRow={3}
+					maxItemsPerRow={2}
 					spacing={10}
 					renderSectionHeader={({ section }) => (
-						<Text marginX={3} marginTop={2} style={styles.sectionHeader}>{section.title}</Text>
+						<Text marginX={3} marginTop={2} style={{ textAlign: 'center', color: '#fff' }}>{section.title}</Text>
 					)}
 					renderItem={({ item }: any) => (
 						<Pressable onPress={() => {
@@ -176,19 +209,17 @@ export default function Beranda({ props }: any) {
 									placement: 'top',
 								})
 							}
-							navigation.push(item.move);
+							navigation.push(item.move as string);
 
 						}}>
 							{({
 								isPressed
 							}) => {
 								return <Box
-									maxW="96"
-									borderWidth="1"
 									borderColor="coolGray.300"
 									shadow="3"
-									pt="5"
-									rounded="8"
+									p="5"
+									rounded="10"
 									style={[styles.itemContainer, {
 										backgroundColor: item.code,
 										transform: [{
@@ -197,7 +228,7 @@ export default function Beranda({ props }: any) {
 									}]}>
 									<View style={{ flex: 1 }}>
 										<Center>
-											<Image resizeMode={'cover'} source={item.icon}></Image>
+											<Image style={{ height: 50, width: 50 }} resizeMode={'cover'} source={item.icon}></Image>
 										</Center>
 									</View>
 									<Text style={styles.itemCode}>{item.name}</Text>

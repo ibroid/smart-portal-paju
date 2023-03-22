@@ -10,11 +10,10 @@ import AmbilAntrian from "../screens/AmbilAntrian";
 import BerandaStack from '../stack/BerandaStack';
 import { AuthContext } from "../context/AuthContext"
 import EncryptedStorage from "react-native-encrypted-storage";
-import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5";
 
 import Splash from "../screens/Splash";
 import HttpRequest from "../utility/HttpRequest";
-import { Alert, BackHandler, Image } from "react-native";
+import { Alert, BackHandler } from "react-native";
 import { Pressable, View, useToast } from "native-base";
 
 const Tab = createBottomTabNavigator();
@@ -95,46 +94,47 @@ export default function MainStack() {
 			) : (
 				<Tab.Navigator
 					screenOptions={({ route }) => ({
-						tabBarIcon: ({ focused, color, size }) => {
-							let iconName;
-
-							if (route.name === 'Home') {
-								iconName = focused
-									? 'home'
-									: 'home-outline';
-							} else if (route.name === 'Profil') {
-								iconName = focused ? 'person' : 'person-outline';
-							}
-
-							// You can return any component that you like here!
-							return <Ionicons name={iconName ? iconName : 'home'} size={size} color={color} />;
-						},
 						tabBarActiveTintColor: '#694CBD',
 						tabBarInactiveTintColor: '#694CBD',
 						headerShown: false,
 						tabBarShowLabel: false,
 						tabBarStyle: {
-							// backgroundColor: 'red',
 							position: 'absolute',
-							height: 60,
+							height: 55,
 							bottom: 15,
-							marginHorizontal: 70,
+							marginHorizontal: 50,
 							borderRadius: 15
 
 						},
 					})}
 				>
-					<Tab.Screen name="Home" component={BerandaStack} />
-					<Tab.Screen name="AmbilAntrian" component={AmbilAntrian}
-						options={{
-							tabBarIcon: () => <FontAwesome5Icon color={"#fff"} size={25} name={"receipt"} />,
-							tabBarButton: (props) => {
-								return <CustomTabBarButton {...props} />;
-								// return <Image source={require('../assets/icons/plus.png')} />
-							}
-						}}
-					/>
-					<Tab.Screen name="Profil" component={Profil} />
+					<Tab.Screen name="Home" component={BerandaStack} options={{
+						tabBarLabel: "Beranda",
+						tabBarIcon: ({ focused, color, size }) => {
+							return <Ionicons size={size} color={color} name={focused ? 'grid' : 'grid-outline'} />
+						}
+					}} />
+					<Tab.Screen name="Persidangan" component={Profil} options={{
+						tabBarIcon: ({ focused, color, size }) => {
+							return <Ionicons size={size} color={color} name={focused ? 'people' : 'people-outline'} />
+						}
+					}} />
+					<Tab.Screen name="AmbilAntrian" component={AmbilAntrian} options={{
+						tabBarIcon: ({ size }) => <Ionicons size={size} color={"#fff"} name="qr-code-outline" />,
+						tabBarButton: (props) => {
+							return CustomTabBarButton(props);
+						}
+					}} />
+					<Tab.Screen name="Antrian" component={Profil} options={{
+						tabBarIcon: ({ focused, color, size }) => {
+							return <Ionicons size={size} color={color} name={focused ? 'easel' : 'easel-outline'} />
+						}
+					}} />
+					<Tab.Screen name="Profil" component={Profil} options={{
+						tabBarIcon: ({ focused, color, size }) => {
+							return <Ionicons size={size} color={color} name={focused ? 'settings' : 'settings-outline'} />
+						}
+					}} />
 				</Tab.Navigator>
 			)}
 

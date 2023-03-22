@@ -1,10 +1,13 @@
-import { Center, Text, Pressable, View, Box, StatusBar, useToast, Divider, Alert, VStack, HStack, IconButton, CloseIcon } from "native-base";
+import { Center, Text, Pressable, View, Box, StatusBar, useToast, Divider, Alert, VStack, HStack, IconButton, CloseIcon, ScrollView, Stack } from "native-base";
 import * as React from "react";
 import { FlatList, Image, ImageBackground, StyleSheet } from "react-native";
-import { FlatGrid, SectionGrid } from "react-native-super-grid";
-import { NavigationProp, useFocusEffect, useNavigation } from '@react-navigation/native';
+import { SectionGrid } from "react-native-super-grid";
+import { useNavigation } from '@react-navigation/native';
 import { Dimensions } from "react-native";
-import { AuthContext } from "../context/AuthContext";
+import MaterialIcon from "react-native-vector-icons/MaterialIcons"
+import IonIcon from "react-native-vector-icons/Ionicons"
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+
 
 export default function Beranda({ props }: any) {
 
@@ -47,75 +50,6 @@ export default function Beranda({ props }: any) {
 		},
 	});
 
-	const [items, setItems] = React.useState([
-		{
-			name: 'Berita',
-			code: '#ADB146',
-			icon: require('../assets/icons/microphone-96x96-2126909.png'),
-			move: "Berita"
-		},
-		{
-			name: 'Perkara',
-			code: '#F6B862',
-			icon: require('../assets/icons/wallet-96x96-2126929.png'),
-			move: "Perkara"
-		},
-		{
-			name: 'Persidangan',
-			code: '#CB5E62',
-			icon: require('../assets/icons/office-96x96-2126944.png'),
-			move: "Jadwal Sidang"
-		},
-		{
-			name: 'Keuangan',
-			code: '#38B1DB',
-			icon: require('../assets/icons/money-96x96-2126908.png'),
-			move: "Keuangan"
-		},
-		{
-			name: 'Akta Cerai',
-			code: '#ADB146',
-			icon: require('../assets/icons/newsletter-96x96-2126946.png'),
-			move: "Akta Cerai"
-		},
-		{
-			name: 'Survey',
-			code: '#7689DF',
-			icon: require('../assets/icons/note-96x96-2126945.png'),
-			move: "Survey"
-		},
-		{
-			name: 'Drive Thru',
-			code: '#FC6A50',
-			icon: require('../assets/icons/start-up-96x96-2126939.png'),
-			move: "Drive Thru"
-		},
-		{
-			name: 'Pendaftaran',
-			code: '#2F4C5C',
-			icon: require('../assets/icons/folder-96x96-2126914.png'),
-			move: "Pendaftaran"
-		},
-		{
-			name: 'Hitung Biaya',
-			code: '#E9CE68',
-			icon: require('../assets/icons/calculator-96x96-2126922.png'),
-			move: "Hitung Biaya"
-		},
-		{
-			name: 'Antrian',
-			code: '#A08CC5',
-			icon: require('../assets/icons/id-card-96x96-2126913.png'),
-			move: "Antrian"
-		},
-		{
-			name: 'Sidang Keliling',
-			code: '#A0CE68',
-			icon: require('../assets/icons/bell-96x96-2126927.png'),
-			move: "Sidang Keliling"
-		},
-	]);
-
 	return (
 		<>
 			<StatusBar
@@ -127,121 +61,138 @@ export default function Beranda({ props }: any) {
 				safeAreaTop
 				backgroundColor="#694CBD"
 			/>
-			<ImageBackground source={require('../assets/images/backgrounds/bg_gradient_blue.png')}
-				style={{ flex: 1 }} >
-				<View style={{ margin: 10, borderRadius: 10, padding: 10, flexDirection: 'row' }}>
-					<View style={{ flexDirection: 'column', width: 120, flex: 1 }}>
-						<Text style={{ fontFamily: 'NexaHeavy', fontSize: 20, color: '#fff' }}>Smart Portal Pengadilan Agama Jakarta Utara</Text>
-					</View>
-					<Image resizeMode="cover" style={{ height: 70, width: 150 }} source={require('../assets/images/cs_man.png')}></Image>
-				</View>
-				<FlatList
-					style={{ maxHeight: 130 }}
-					data={[
-						require('../assets/images/banner/banner_selamat_datang.png'),
-						require('../assets/images/banner/banner_anti_gratifikasi.png'),
-						require('../assets/images/banner/banner_maklumat.png'),
-						require('../assets/images/banner/banner_corona.png'),
-						require('../assets/images/banner/banner_laporkan.png'),
-					]}
-					horizontal
-					renderItem={({ item }) => {
-						return <View>
-							<Image style={{ width: Dimensions.get('window').width, height: 125 }} resizeMode={"stretch"} resizeMethod={"auto"} source={item} />
-						</View>
-					}}
-				/>
-				<Alert maxW="400" status="success" colorScheme="light" m={1}>
-					<VStack space={2} flexShrink={1} w="100%">
-						<HStack flexShrink={1} space={2} alignItems="center" justifyContent="space-between">
-							<HStack flexShrink={1} space={2} alignItems="center">
-								<Alert.Icon />
-								<Text fontSize="md" fontWeight="medium" color="coolGray.800">
-									Assalamualaikum
-								</Text>
-							</HStack>
-							<IconButton variant="unstyled" _focus={{
-								borderWidth: 0
-							}} icon={<CloseIcon size="3" />} _icon={{
-								color: "coolGray.600"
-							}} />
+			<ImageBackground source={require('../assets/images/backgrounds/bg_gradient_blue.png')} style={{ flex: 1 }} >
+				<ScrollView>
+					<VStack>
+
+						<HStack alignItems={"center"} justifyContent={"space-between"} m={3}>
+							<IonIcon name={"person-outline"} color={"#fff"} size={24} />
+							<Text bold color={"#fff"}>Beranda</Text>
+							<IonIcon name={"notifications-outline"} color={"#fff"} size={24} />
 						</HStack>
-						<Box pl="6" _text={{
-							color: "coolGray.600"
-						}}>
-							Selamat Datang
-						</Box>
+						<View style={{ margin: 10, borderRadius: 10, padding: 10, flexDirection: 'row' }}>
+							<View style={{ flexDirection: 'column', width: 120, flex: 1 }}>
+								<Text style={{ fontSize: 20, color: '#fff' }}>Smart Portal</Text>
+								<Text color={"amber.400"} style={{ fontFamily: 'NexaHeavy', fontSize: 20 }}>Pengadilan Agama Jakarta Utara</Text>
+							</View>
+							<Image resizeMode="contain" style={{ height: 70, width: 150 }} source={require('../assets/images/cs_man.png')}></Image>
+						</View>
 					</VStack>
-				</Alert>
-				<SectionGrid
-					sections={[
-						{
-							title: 'Menu Perkara',
-							data: items.slice(0, 7),
-						},
-						{
-							title: 'Menu Layanan Publik',
-							data: items.slice(7, 12),
-						}
-					]}
-					itemDimension={60}
-					data={items}
-					style={styles.gridView}
-
-					maxItemsPerRow={2}
-					spacing={10}
-					renderSectionHeader={({ section }) => (
-						<Text marginX={3} marginTop={2} style={{ textAlign: 'center', color: '#fff' }}>{section.title}</Text>
-					)}
-					renderItem={({ item }: any) => (
-						<Pressable onPress={() => {
-							if (
-								// item.move == 'Sidang Keliling' ||
-								item.move == 'Antrian' ||
-								item.move == 'Berita' ||
-								item.move == 'Drive Thru'
-							) {
-								return toast.show({
-									title: 'Peringatan',
-									description: 'Menu ini akan tersedia pada update yang akan datang',
-									variant: 'solid',
-									backgroundColor: 'red.500',
-									placement: 'top',
-								})
-							}
-							navigation.push(item.move as string);
-
-						}}>
-							{({
-								isPressed
-							}) => {
-								return <Box
-									borderColor="coolGray.300"
-									shadow="3"
-									p="5"
-									rounded="10"
-									style={[styles.itemContainer, {
-										backgroundColor: item.code,
-										transform: [{
-											scale: isPressed ? 0.96 : 1
-										}]
-									}]}>
-									<View style={{ flex: 1 }}>
-										<Center>
-											<Image style={{ height: 50, width: 50 }} resizeMode={'cover'} source={item.icon}></Image>
+					<KeyboardAwareScrollView
+						contentContainerStyle={{
+							flexGrow: 1,
+						}}
+						style={{ flex: 1 }}
+					>
+						<VStack
+							flex="1"
+							px="4"
+							py="5"
+							mx="2"
+							maxHeight={400}
+							_light={{ bg: "white" }}
+							_dark={{ bg: "coolGray.800" }}
+							space="3"
+							justifyContent="space-between"
+							borderTopRightRadius={{ base: "2xl", md: "xl" }}
+							borderBottomRightRadius={{ base: "2xl", md: "xl" }}
+							borderBottomLeftRadius={{ base: "2xl", md: "xl" }}
+							borderTopLeftRadius={{ base: "2xl", md: "0" }}
+						>
+							<VStack
+								mb="4"
+								space="3"
+								safeAreaBottom
+								alignItems="center"
+								justifyContent="center"
+								mt={{ base: "auto", md: "8" }}
+							>
+								<FlatList
+									style={{ maxHeight: 130 }}
+									data={[
+										require('../assets/images/banner/banner_selamat_datang.png'),
+										require('../assets/images/banner/banner_anti_gratifikasi.png'),
+										require('../assets/images/banner/banner_maklumat.png'),
+										require('../assets/images/banner/banner_corona.png'),
+										require('../assets/images/banner/banner_laporkan.png'),
+									]}
+									horizontal
+									renderItem={({ item }) => {
+										return <View shadow={"9"}>
+											<ImageBackground style={{ width: 350, height: 120 }} resizeMode={"stretch"} resizeMethod={"auto"} source={item} >
+												<View style={{ flex: 1, justifyContent: 'center', alignItems: 'flex-end' }}>
+													<MaterialIcon
+														name="arrow-forward-ios"
+														size={30}
+														color={"#fff"}
+													/>
+												</View>
+											</ImageBackground>
+										</View>
+									}}
+								/>
+								<Text
+									_light={{ color: "coolGray.800" }}
+									_dark={{ color: "coolGray.400" }}
+								>
+									Selamat Datang. Nama Pengguna
+								</Text>
+								<HStack space={9}>
+									<VStack alignItems={"center"}>
+										<Center h={50} w={50} p={0}>
+											<Image source={require('../assets/icons/financial.png')} />
 										</Center>
-									</View>
-									<Text style={styles.itemCode}>{item.name}</Text>
-								</Box>
-							}}
-						</Pressable>
-						// <View style={[styles.itemContainer, { backgroundColor: item.code }]}>
-						// <Text style={styles.itemCode}>{item.name}</Text>
-						// </View>
-					)}
-
-					ListFooterComponent={<Divider mt={20} />}
-				/>
+										<Text fontSize={12} color={"violet.500"}>Perkara</Text>
+									</VStack>
+									<VStack alignItems={"center"}>
+										<Center h={50} w={50} p={0}>
+											<Image source={require('../assets/icons/event.png')} />
+										</Center>
+										<Text fontSize={12} color={"violet.500"}>Sidang</Text>
+									</VStack>
+									<VStack alignItems={"center"}>
+										<Center h={50} w={50} p={0}>
+											<Image source={require('../assets/icons/company.png')} />
+										</Center>
+										<Text fontSize={12} color={"violet.500"}>Keungan</Text>
+									</VStack>
+									<VStack alignItems={"center"}>
+										<Center h={50} w={50} p={0}>
+											<Image source={require('../assets/icons/authorization.png')} />
+										</Center>
+										<Text fontSize={12} color={"violet.500"}>Putusan</Text>
+									</VStack>
+								</HStack>
+								<HStack space={9}>
+									<VStack alignItems={"center"}>
+										<Center h={50} w={50} p={0}>
+											<Image source={require('../assets/icons/require.png')} />
+										</Center>
+										<Text fontSize={12} color={"violet.500"}>Pendaftaran</Text>
+									</VStack>
+									<VStack alignItems={"center"}>
+										<Center h={50} w={50} p={0}>
+											<Image source={require('../assets/icons/project.png')} />
+										</Center>
+										<Text fontSize={12} color={"violet.500"}>Saksi</Text>
+									</VStack>
+									<VStack alignItems={"center"}>
+										<Center h={50} w={50} p={0}>
+											<Image source={require('../assets/icons/money.png')} />
+										</Center>
+										<Text fontSize={12} color={"violet.500"}>Biaya</Text>
+									</VStack>
+									<VStack alignItems={"center"}>
+										<Center h={50} w={50} p={0}>
+											<Image source={require('../assets/icons/survey.png')} />
+										</Center>
+										<Text fontSize={12} color={"violet.500"}>Survey</Text>
+									</VStack>
+								</HStack>
+							</VStack>
+						</VStack>
+					</KeyboardAwareScrollView>
+				</ScrollView>
 			</ImageBackground>
 
 		</>

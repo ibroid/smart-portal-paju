@@ -23,7 +23,6 @@ import {
 
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { IFormSignUp } from "../interfaces/FormInterface"
 import { kodeSatker } from "../backend.json";
 import { AuthContext } from "../context/AuthContext";
 import { AxiosError, AxiosResponse } from "axios";
@@ -31,7 +30,7 @@ import { IRegisterResponse } from "../interfaces/ResponseInterface";
 import ScreenLoading from "../components/ScreenLoading";
 import HttpRequest from "../utility/HttpRequest";
 import * as qs from "qs";
-import { useForm, useController, Control } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import InputDefault from "../components/InputDefault";
 import SelectDefault from "../components/SelectDefault";
 
@@ -74,7 +73,7 @@ function SignUpForm({ props }: any) {
 			.then((res: AxiosResponse<IRegisterResponse>) => {
 				toast.show({
 					title: 'Notifikasi',
-					description: res.data.message,
+					description: res.data.message + '. Anda akan diarahkan sebentar lagi.',
 					duration: 3000,
 					bgColor: "amber.500",
 					onCloseComplete() {

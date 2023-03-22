@@ -6,9 +6,6 @@ import {
 	Text,
 	Link,
 	Image,
-	useColorModeValue,
-	IconButton,
-	Icon,
 	Center,
 	Hidden,
 	StatusBar,
@@ -16,8 +13,7 @@ import {
 	Box,
 	useToast,
 } from "native-base";
-import Entypo from "react-native-vector-icons/Entypo";
-import FloatingLabelInput from "../components/FloatingLabelInput";
+
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { AuthContext } from "../context/AuthContext";
 import QueryString from "qs";
@@ -34,49 +30,38 @@ export function SignInForm({ props }: any) {
 	const { handleSubmit, control } = useForm()
 	const { authContext } = useContext(AuthContext);
 	const toast = useToast();
-	const [loading, setLoading] = useState<boolean>(false)
-	const [errMessage, setErrMessage] = useState<string>('')
-	const [formValue, setFormValue] = useState<{
-		telepon: string;
-		password: string;
-	}>({
-		telepon: '',
-		password: ''
-	})
+	const [loading, setLoading] = useState<boolean>(false);
 
-	const [showPass, setShowPass] = React.useState<boolean>(false);
+	const submitLogin = (data: any) => {
 
-	const submitLogin = () => {
-		if (!formValue.telepon || !formValue.password) {
-			return toast.show({
-				title: 'Peringatan',
-				description: 'Silahkan lengkapi form daftar',
-				variant: 'solid',
-				backgroundColor: 'red.500',
-				placement: 'top',
-			})
-		}
 		const body = QueryString.stringify({
-			phone: formValue.telepon,
-			password: formValue.password
+			phone: data.nomorTelepon,
+			password: data.password
 		})
-		setErrMessage('')
+
 		setLoading(true)
 
 		HttpRequest.setHeaderXForm().request.post('auth/login', body)
 			.then((res: AxiosResponse<ILoginResponse>) => {
-				console.log(res.data)
-				Alert.alert('Notifikasi', res.data.message, [
-					{
-						text: 'Ok !',
-						onPress: () => authContext.signIn(res.data.token)
-					}
-				])
+				toast.show({
+					title: 'Notifikasi',
+					bgColor: 'success.400',
+					description: res.data.message + '. Anda akan di arahkan sebentar lagi.',
+					duration: 2000,
+					onCloseComplete() {
+						authContext.signIn(res.data.token)
+					},
+				})
 			})
 			.catch((err: AxiosError<{ status: string, message: string }>) => {
-				// console.log(err)
-				Alert.alert('Error. ' + err.response?.data.status, 'Terjadi Kesalahan. ' + err.response?.data.message)
-				// console.log(err.response?.data)
+
+				toast.show({
+					title: 'Terjadi Kesalahan',
+					bgColor: 'red.500',
+					description: err.response?.data.message,
+					duration: 2000
+				})
+
 			})
 			.finally(() => {
 				setLoading(false)
@@ -108,67 +93,18 @@ export function SignInForm({ props }: any) {
 			>
 				<VStack space="2">
 					<VStack space={{ base: "5", md: "4" }}>
-						<Text textAlign={'center'} color={'red.500'} bold>{errMessage}</Text>
 						<InputDefault name="nomorTelepon" control={control} placeholder="Masukan Nomor Telepon" />
-						<FloatingLabelInput
-							isRequired
-							type={showPass ? "" : "password"}
-							label="Password"
-							borderRadius="4"
-							labelColor="#9ca3af"
-							labelBGColor={useColorModeValue("#fff", "#1f2937")}
-							defaultValue={formValue?.password}
-							onChangeText={(txt: string) => setFormValue(ress => {
-								return { ...ress, password: txt }
-							})}
-							InputRightElement={
-								<IconButton
-									variant="unstyled"
-									icon={
-										<Icon
-											size="4"
-											color="coolGray.400"
-											as={Entypo}
-											name={showPass ? "eye-with-line" : "eye"}
-										/>
-									}
-									onPress={() => {
-										setShowPass(true);
-									}}
-								/>
-							}
-							_text={{
-								fontSize: "sm",
-								fontWeight: "medium",
-							}}
-							_dark={{
-								borderColor: "coolGray.700",
-							}}
-							_light={{
-								borderColor: "coolGray.300",
-							}}
-						/>
+						<InputDefault name="password" control={control} placeholder="Masukan Password" isPass={true} />
 					</VStack>
-					<Link
-						ml="auto"
-						_text={{
-							fontSize: "xs",
-							fontWeight: "bold",
-							textDecoration: "none",
-						}}
-						_light={{
-							_text: {
-								color: "primary.900",
-							},
-						}}
-						_dark={{
-							_text: {
-								color: "primary.500",
-							},
-						}}
-					>
-					</Link>
 					<Button
+						onPress={handleSubmit(submitLogin, () => {
+							toast.show({
+								title: 'Terjadi Kesalahan',
+								description: 'Silahkan Lengkapi Form',
+								duration: 2000,
+								bgColor: "red.500"
+							})
+						})}
 						isLoading={loading}
 						isLoadingText="Mohon Tunggu"
 						mt="5"
@@ -179,9 +115,6 @@ export function SignInForm({ props }: any) {
 						}}
 						_light={{
 							bg: "amber.500",
-						}}
-						onPress={() => {
-							submitLogin();
 						}}
 					>
 						MASUK
@@ -202,7 +135,6 @@ export function SignInForm({ props }: any) {
 					>
 						Belum punya akun ?
 					</Text>
-					{/* Opening Link Tag navigateTo:"SignUp" */}
 					<Link
 						_text={{
 							fontWeight: "bold",
@@ -224,7 +156,6 @@ export function SignInForm({ props }: any) {
 					>
 						Daftar Disini
 					</Link>
-					{/* Closing Link Tag */}
 				</HStack>
 			</VStack>
 		</KeyboardAwareScrollView>

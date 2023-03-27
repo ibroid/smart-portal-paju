@@ -15,10 +15,8 @@ import {
 	Center,
 	StatusBar,
 	Box,
-	Stack,
-	Select,
-	Input,
 	useToast,
+	Stack,
 } from "native-base";
 
 import AntDesign from "react-native-vector-icons/AntDesign";

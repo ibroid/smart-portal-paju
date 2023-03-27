@@ -15,8 +15,11 @@ import Splash from "../screens/Splash";
 import HttpRequest from "../utility/HttpRequest";
 import { Alert, BackHandler } from "react-native";
 import { Pressable, View, useToast } from "native-base";
+import Settings from "../screens/Settings";
+import { IMainStack } from "../interfaces/StackInterface";
+import Antrian from "../screens/Antrian";
 
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator<IMainStack>();
 
 export default function MainStack() {
 
@@ -125,12 +128,12 @@ export default function MainStack() {
 							return CustomTabBarButton(props);
 						}
 					}} />
-					<Tab.Screen name="Antrian" component={Profil} options={{
+					<Tab.Screen name="Antrian" component={Antrian} options={{
 						tabBarIcon: ({ focused, color, size }) => {
 							return <Ionicons size={size} color={color} name={focused ? 'easel' : 'easel-outline'} />
 						}
 					}} />
-					<Tab.Screen name="Profil" component={Profil} options={{
+					<Tab.Screen name="Settings" component={Settings} options={{
 						tabBarIcon: ({ focused, color, size }) => {
 							return <Ionicons size={size} color={color} name={focused ? 'settings' : 'settings-outline'} />
 						}

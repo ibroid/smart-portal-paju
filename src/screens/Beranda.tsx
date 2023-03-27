@@ -1,6 +1,6 @@
-import { Center, Text, Pressable, View, Box, StatusBar, useToast, Divider, Alert, VStack, HStack, IconButton, CloseIcon, ScrollView, Stack } from "native-base";
+import { Center, Text, Pressable, View, Box, useToast, Divider, Alert, VStack, HStack, IconButton, CloseIcon, ScrollView, Stack } from "native-base";
 import * as React from "react";
-import { FlatList, Image, ImageBackground, StyleSheet } from "react-native";
+import { FlatList, Image, ImageBackground, StatusBar } from "react-native";
 import { SectionGrid } from "react-native-super-grid";
 import { useNavigation } from '@react-navigation/native';
 import { Dimensions } from "react-native";
@@ -13,42 +13,6 @@ export default function Beranda({ props }: any) {
 
 	const navigation = useNavigation();
 	const toast = useToast()
-
-	const styles = StyleSheet.create({
-		gridView: {
-			marginTop: 20,
-			flex: 1,
-		},
-		itemContainer: {
-			justifyContent: 'flex-end',
-			borderRadius: 5,
-			padding: 5,
-			height: 'auto',
-		},
-		itemName: {
-			fontSize: 16,
-			color: '#fff',
-			textAlign: 'center',
-			fontWeight: '600',
-		},
-		itemCode: {
-			// botttom: -10,
-			textAlign: 'center',
-			fontWeight: '600',
-			fontSize: 12,
-			color: '#fff',
-		},
-		sectionHeader: {
-			flex: 1,
-			fontSize: 15,
-			fontWeight: '600',
-			alignItems: 'center',
-			backgroundColor: '#B6C1E3',
-			borderRadius: 10,
-			color: '#fff',
-			padding: 10,
-		},
-	});
 
 	return (
 		<>
@@ -66,7 +30,9 @@ export default function Beranda({ props }: any) {
 					<VStack>
 
 						<HStack alignItems={"center"} justifyContent={"space-between"} m={3}>
-							<IonIcon name={"person-outline"} color={"#fff"} size={24} />
+							<Pressable>
+								<IonIcon name={"person-outline"} color={"#fff"} size={24} />
+							</Pressable>
 							<Text bold color={"#fff"}>Beranda</Text>
 							<IonIcon name={"notifications-outline"} color={"#fff"} size={24} />
 						</HStack>

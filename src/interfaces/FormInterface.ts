@@ -6,3 +6,9 @@ export interface IFormSignUp {
     tahunPerkara?: string;
     jenisPerkara?: string;
 };
+
+export interface IPerkaraForm {
+    nomorPerkara: string;
+    tahunPerkara: string;
+    jenisPerkara: string;
+}

@@ -6,3 +6,18 @@ export type IMainStack = {
     Persidangan: undefined;
     AmbilAntrian: undefined;
 }
+
+export type IMenuStack = {
+    Beranda: undefined;
+    Umum: undefined;
+    Perkara: undefined;
+    JadwalSidang: undefined;
+    Keuangan: undefined;
+    AktaCerai: undefined;
+    Survey: undefined;
+    PengisianSurvey: undefined;
+    Pendaftaran: undefined;
+    HitungBiaya: undefined;
+    SidangKeliling: undefined;
+    Profil: undefined;
+}

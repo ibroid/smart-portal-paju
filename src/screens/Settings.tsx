@@ -67,6 +67,7 @@ export default function Settings({ props }: any) {
 					>
 						<VStack
 							m={5}
+							maxH={200}
 							maxW={350}
 							flex="1"
 							px="6"
@@ -89,11 +90,14 @@ export default function Settings({ props }: any) {
 								},
 							]} placeholder="Jenis Perkara" controllerProp={{ control: control, name: "jenisPerkara" }} />
 							<SelectDefault data={years} placeholder="Tahun Perkara" controllerProp={{ control: control, name: "tahunPerkara" }} />
-							<Button bgColor={"amber.500"} endIcon={<AntDesign name={"save"} color={"#fff"} size={20} />}>Simpan</Button>
+							<Button onPress={() => console.log('ok')} colorScheme={"amber"} endIcon={<AntDesign name={"save"} color={"#fff"} size={20} />}>Simpan</Button>
 
 						</VStack>
+						<Center m={3}>
+							<Text color={"#fff"} textAlign={"center"}>Klik di bawah ini jika anda ingin logout.</Text>
+						</Center>
+						<Button mx={10} onPress={() => console.log('ok')} colorScheme={"error"} endIcon={<AntDesign name={"logout"} color={"#fff"} size={20} />}>Logout</Button>
 					</KeyboardAwareScrollView>
-
 				</Stack>
 			</ImageBackground>
 		</>

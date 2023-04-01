@@ -1,17 +1,15 @@
 import { Center, Text, Pressable, View, Box, useToast, Divider, Alert, VStack, HStack, IconButton, CloseIcon, ScrollView, Stack } from "native-base";
 import * as React from "react";
 import { FlatList, Image, ImageBackground, StatusBar } from "react-native";
-import { SectionGrid } from "react-native-super-grid";
-import { useNavigation } from '@react-navigation/native';
-import { Dimensions } from "react-native";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons"
 import IonIcon from "react-native-vector-icons/Ionicons"
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { IMenuStack } from "../interfaces/StackInterface";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 
-export default function Beranda({ props }: any) {
+export default function Beranda({ route, navigation }: NativeStackScreenProps<IMenuStack, 'Beranda'>) {
 
-	const navigation = useNavigation();
 	const toast = useToast()
 
 	return (
@@ -30,11 +28,11 @@ export default function Beranda({ props }: any) {
 					<VStack>
 
 						<HStack alignItems={"center"} justifyContent={"space-between"} m={3}>
-							<Pressable>
+							<View></View>
+							<Text bold color={"#fff"}>Beranda</Text>
+							<Pressable onPress={() => { navigation.push("Profil") }}>
 								<IonIcon name={"person-outline"} color={"#fff"} size={24} />
 							</Pressable>
-							<Text bold color={"#fff"}>Beranda</Text>
-							<IonIcon name={"notifications-outline"} color={"#fff"} size={24} />
 						</HStack>
 						<View style={{ margin: 10, borderRadius: 10, padding: 10, flexDirection: 'row' }}>
 							<View style={{ flexDirection: 'column', width: 120, flex: 1 }}>
@@ -126,7 +124,7 @@ export default function Beranda({ props }: any) {
 										<Center h={50} w={50} p={0}>
 											<Image source={require('../assets/icons/authorization.png')} />
 										</Center>
-										<Text fontSize={12} color={"violet.500"}>Putusan</Text>
+										<Text fontSize={12} color={"violet.500"}>Produk</Text>
 									</VStack>
 								</HStack>
 								<HStack space={9}>

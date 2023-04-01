@@ -1,9 +1,9 @@
-import { Text, Box, HStack, Pressable, Center, Hidden, Stack, VStack, ScrollView, Avatar, Divider, Spacer, Button, Radio, View, Actionsheet, Select, useColorModeValue } from "native-base";
+import { Text, Box, HStack, Pressable, Center, Hidden, Stack, VStack, ScrollView, Avatar, Divider, Spacer, Button, Radio, View, Actionsheet, Select, useColorModeValue, StatusBar } from "native-base";
 import IonIcon from "react-native-vector-icons/Ionicons";
 import * as React from 'react';
 import { AuthContext } from "../context/AuthContext";
 import HttpRequest from "../utility/HttpRequest";
-import { Alert } from "react-native";
+import { Alert, ImageBackground } from "react-native";
 import { AxiosError, AxiosResponse } from "axios";
 import { IDataUmumParaPihakResponse, IIdentityResponse } from "../interfaces/ResponseInterface";
 import useHttp from "../hooks/useHttp";
@@ -208,17 +208,16 @@ export default function Profil({ props }: any) {
 
 	return (
 		<>
+			<StatusBar
+				translucent
+				backgroundColor="transparent"
+				barStyle="light-content"
+			/>
 			<Box
 				safeAreaTop
-				_light={{ bg: "primary.900" }}
-				_dark={{ bg: "coolGray.900" }}
+				backgroundColor="#694CBD"
 			/>
-			<Center
-				my="auto"
-				_dark={{ bg: "coolGray.900" }}
-				_light={{ bg: "primary.800" }}
-				flex="1"
-			>
+			<ImageBackground source={require('../assets/images/backgrounds/bg_gradient_blue.png')} style={{ flex: 1 }}>
 				<Stack
 					flexDirection={{ base: "column", md: "row" }}
 					w="100%"
@@ -226,13 +225,7 @@ export default function Profil({ props }: any) {
 					flex={{ base: "1", md: "none" }}
 				>
 					<Hidden from="md">
-						<VStack px="4" mt="4" mb="5" space="2">
-							<Center>
-								<Text color="coolGray.50" fontSize="lg">
-									Profil Anda
-								</Text>
-							</Center>
-
+						<VStack px="4" mt="12" mb="5" space="2">
 							<HStack space="2">
 								<Avatar bg="purple.600" alignSelf="center" size="xl" source={require('../assets/images/icon_new_avatar.png')}>
 								</Avatar>
@@ -240,6 +233,7 @@ export default function Profil({ props }: any) {
 									{data ? CropName(data?.nama, data?.jenis_kelamin) : ''}
 									<Divider />
 									<Text fontSize="xl" color="coolGray.50">{data?.nomor_indentitas}</Text>
+
 								</VStack>
 							</HStack>
 						</VStack>
@@ -247,7 +241,7 @@ export default function Profil({ props }: any) {
 
 					<VStack
 						flex="1"
-						px="6"
+						px="3"
 						py="6"
 						_light={{ bg: "white" }}
 						_dark={{ bg: "coolGray.800" }}
@@ -257,59 +251,6 @@ export default function Profil({ props }: any) {
 						borderBottomRightRadius={{ base: "0", md: "xl" }}
 						borderTopLeftRadius={{ base: "2xl", md: "0" }}
 					>
-						<HStack space={4} justifyContent={'center'}>
-							<Box alignItems="center">
-								<Pressable maxW="96" onPress={submitLogout}>
-									{({
-										isHovered,
-										isFocused,
-										isPressed
-									}) => {
-										return <Box bg={"danger.500"} style={{
-											transform: [{
-												scale: isPressed ? 0.96 : 1
-											}]
-										}} p="5" rounded="8" shadow={3} borderWidth="1" borderColor="coolGray.300">
-											<IonIcon name={'ios-power'} size={20} color={'#fff'} />
-										</Box>;
-									}}
-								</Pressable>
-							</Box>
-							<Box alignItems="center">
-								<Pressable maxW="96" onPress={SubmitChangePerkara}>
-									{({
-										isHovered,
-										isFocused,
-										isPressed
-									}) => {
-										return <Box bg={"amber.500"} style={{
-											transform: [{
-												scale: isPressed ? 0.96 : 1
-											}]
-										}} p="5" rounded="8" shadow={3} borderWidth="1" borderColor="coolGray.300">
-											<IonIcon name={'ios-reload-outline'} size={20} color={'#fff'} />
-										</Box>;
-									}}
-								</Pressable>
-							</Box>
-							<Box alignItems="center">
-								<Pressable maxW="96" onPress={ShowInfo}>
-									{({
-										isHovered,
-										isFocused,
-										isPressed
-									}) => {
-										return <Box bg={"dark.200"} style={{
-											transform: [{
-												scale: isPressed ? 0.96 : 1
-											}]
-										}} p="5" rounded="8" shadow={3} borderWidth="1" borderColor="coolGray.300">
-											<IonIcon name={'md-information-circle'} size={20} color={'#fff'} />
-										</Box>;
-									}}
-								</Pressable>
-							</Box>
-						</HStack>
 						{loading ? <ScreenLoading /> : data && data.nama
 							? <ScrollView
 								contentContainerStyle={{
@@ -519,7 +460,7 @@ export default function Profil({ props }: any) {
 						</Actionsheet>
 					</VStack>
 				</Stack>
-			</Center>
+			</ImageBackground>
 		</>
 	);
 }

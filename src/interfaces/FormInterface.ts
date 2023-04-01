@@ -7,6 +7,11 @@ export interface IFormSignUp {
     jenisPerkara?: string;
 };
 
+export interface IFormSignIn {
+    nomorTelepon: string;
+    password: string;
+};
+
 export interface IPerkaraForm {
     nomorPerkara: string;
     tahunPerkara: string;

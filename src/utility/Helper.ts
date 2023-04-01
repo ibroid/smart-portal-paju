@@ -214,6 +214,21 @@ const Helper = {
         if (id == 15) return "  RV                                          "
         if (id == 16) return "  Yurisprudensi                               "
         if (id == 17) return "  HIR/RBg                                     "
+    },
+
+    RuangSidang: (id: number) => {
+        switch (id) {
+            case 1:
+                return "Umar bin Khatab"
+                break;
+            case 2:
+                return "Abu Musa"
+                break;
+
+            default:
+                return "Asyuraih"
+                break;
+        }
     }
 }
 

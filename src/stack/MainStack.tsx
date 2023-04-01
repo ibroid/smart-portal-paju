@@ -18,6 +18,7 @@ import { Pressable, View, useToast } from "native-base";
 import Settings from "../screens/Settings";
 import { IMainStack } from "../interfaces/StackInterface";
 import Antrian from "../screens/Antrian";
+import AntrianSidang from "../screens/AntrianSidang";
 
 const Tab = createBottomTabNavigator<IMainStack>();
 
@@ -117,7 +118,7 @@ export default function MainStack() {
 							return <Ionicons size={size} color={color} name={focused ? 'grid' : 'grid-outline'} />
 						}
 					}} />
-					<Tab.Screen name="Persidangan" component={Profil} options={{
+					<Tab.Screen name="Persidangan" component={AntrianSidang} options={{
 						tabBarIcon: ({ focused, color, size }) => {
 							return <Ionicons size={size} color={color} name={focused ? 'people' : 'people-outline'} />
 						}

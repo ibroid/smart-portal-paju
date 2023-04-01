@@ -506,3 +506,42 @@ export interface ISurveyCekResponse {
     ikm: number;
     ipk: number
 }
+
+export interface IAntrianResponse {
+    antrian_sidang: IAntrianSidangResponse[];
+    antrian_oss: IAntrianOssResponse[]
+}
+
+export interface IAntrianOssResponse {
+    id: number,
+    nama_ruang: string,
+    no_antrian: string,
+    created_at: string | Date,
+    updated_at: string | Date,
+    cs_id: string
+}
+
+export interface IAntrianSidangResponse {
+    id: number,
+    nomor_ruang: number,
+    nomor_antrian_id: number,
+    created_at: string | Date,
+    updated_at: string | Date,
+    nomor_antrian_sidang: IDetailAntrianSidang
+}
+
+export interface IDetailAntrianSidang {
+    id: number,
+    nomor_urutan: number,
+    status: number,
+    nomor_ruang: number,
+    nama_ruang: string,
+    nomor_perkara: string,
+    pihak_satu: string,
+    pihak_dua: string,
+    tanggal_sidang: string,
+    jadwal_sidang_id: null,
+    priority: null,
+    created_at: string | Date,
+    updated_at: string | Date
+}

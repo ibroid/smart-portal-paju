@@ -24,10 +24,11 @@ import { Alert, ImageBackground } from "react-native";
 import { ILoginResponse } from "../interfaces/ResponseInterface";
 import { useForm } from "react-hook-form";
 import InputDefault from "../components/InputDefault";
+import { IFormSignIn } from "../interfaces/FormInterface"
 
 export function SignInForm({ props }: any) {
 
-	const { handleSubmit, control } = useForm()
+	const { handleSubmit, control } = useForm<IFormSignIn>()
 	const { authContext } = useContext(AuthContext);
 	const toast = useToast();
 	const [loading, setLoading] = useState<boolean>(false);
@@ -93,8 +94,14 @@ export function SignInForm({ props }: any) {
 			>
 				<VStack space="2">
 					<VStack space={{ base: "5", md: "4" }}>
-						<InputDefault name="nomorTelepon" control={control} placeholder="Masukan Nomor Telepon" />
-						<InputDefault name="password" control={control} placeholder="Masukan Password" isPass={true} />
+						<InputDefault placeholder="Masukan Nomor Telepon" controllerProp={{
+							name: "nomorTelepon",
+							control: control
+						}} isPass={false} />
+						<InputDefault placeholder="Masukan Password" isPass={true} controllerProp={{
+							name: "password",
+							control: control
+						}} />
 					</VStack>
 					<Button
 						onPress={handleSubmit(submitLogin, () => {

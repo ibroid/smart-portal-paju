@@ -42,6 +42,7 @@ export default function Settings({ props }: any) {
 				barStyle="dark-content"
 			/>
 			<Box
+				backgroundColor="#694CBD"
 				safeAreaTop
 			/>
 			<ImageBackground source={require('../assets/images/backgrounds/bg_gradient_blue.png')} style={{ flex: 1 }} >
@@ -51,11 +52,9 @@ export default function Settings({ props }: any) {
 					maxW={{ md: "1016px" }}
 					flex={{ base: "1", md: "none" }}
 				>
-					<Box bgColor={"light.100"} height={50} borderBottomRadius={"2xl"}>
-						<Center m={3}>
-							<Text color={"violet.700"} bold>Settings</Text>
-						</Center>
-					</Box>
+					<Center>
+						<Text color={"white"} bold>Settings</Text>
+					</Center>
 					<Center m={3}>
 						<Text color={"#fff"} textAlign={"center"}>Silahkan tentukan nomor perkara Anda di bawah ini. Pastikan nomor perkara Anda sudah ter Register di {namaSatker}.</Text>
 					</Center>

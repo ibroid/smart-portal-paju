@@ -45,7 +45,11 @@ export default function Keuangan({ props }: any) {
 			<StatusBar
 				translucent
 				backgroundColor="transparent"
-				barStyle="dark-content"
+				barStyle="light-content"
+			/>
+			<Box
+				safeAreaTop
+				backgroundColor="#694CBD"
 			/>
 			<ImageBackground
 				source={require('../assets/images/backgrounds/bg_gradient_blue.png')}
@@ -58,10 +62,7 @@ export default function Keuangan({ props }: any) {
 					flex={{ base: "1", md: "none" }}
 				>
 					<Hidden from="md">
-						<VStack px="4" mt="4" mb="5" space="2">
-							<Text color="coolGray.50" fontSize="lg">
-								Riwayat Keuangan
-							</Text>
+						<VStack px="4" mt="12" mb="5" space="2">
 							<VStack space="2">
 								<Center>
 									<Box >
@@ -98,41 +99,27 @@ export default function Keuangan({ props }: any) {
 						>
 							{loading ? <ScreenLoading /> : (
 								data?.map((row, i) => {
-									return <Box key={++i} alignItems="center">
-										<Pressable >
-											{({
-												isHovered,
-												isPressed
-											}) => {
-												return <Box width={350} bg={isPressed ? "coolGray.200" : isHovered ? "coolGray.200" : "coolGray.100"} style={{
-													transform: [{
-														scale: isPressed ? 0.96 : 1
-													}]
-												}} p="3" rounded="8" shadow={3} borderWidth="1" borderColor="coolGray.300">
-													<HStack alignItems="center">
-														<Badge colorScheme={row.jenis_transaksi !== 1 ? 'danger' : 'success'} _text={{
-															color: "white"
-														}} variant="solid" rounded="4">
-															{row.jenis_transaksi !== 1 ? 'Transaksi Keluar' : 'Transaksi Masuk'}
-														</Badge>
-														<Spacer />
-														<Text fontSize={10} color="coolGray.800">
-															{localDate(row.tanggal_transaksi)}
-														</Text>
-													</HStack>
-													<Text color="coolGray.800" mt="1" fontWeight="medium" fontSize="xl">
-														{Rupiah(row.jumlah)}
-													</Text>
-													<Text fontSize="sm" color="coolGray.700">
-														{row.uraian}
-													</Text>
-												</Box>;
-											}}
-										</Pressable>
+									return <Box key={++i} width={350} p="3" rounded="8" borderWidth="1" borderColor="coolGray.300">
+										<HStack alignItems="center">
+											<Badge colorScheme={row.jenis_transaksi !== 1 ? 'danger' : 'success'} _text={{
+												color: "white"
+											}} variant="solid" rounded="4">
+												{row.jenis_transaksi !== 1 ? 'Transaksi Keluar' : 'Transaksi Masuk'}
+											</Badge>
+											<Spacer />
+											<Text fontSize={10} color="coolGray.800">
+												{localDate(row.tanggal_transaksi)}
+											</Text>
+										</HStack>
+										<Text color="coolGray.800" mt="1" fontWeight="medium" fontSize="xl">
+											{Rupiah(row.jumlah)}
+										</Text>
+										<Text fontSize="sm" color="coolGray.700">
+											{row.uraian}
+										</Text>
 									</Box>
 								})
 							)}
-							<Divider mt={20} />
 						</VStack>
 					</ScrollView>
 				</Stack>

@@ -4,13 +4,11 @@ import { FlatList, Image, ImageBackground, StatusBar } from "react-native";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons"
 import IonIcon from "react-native-vector-icons/Ionicons"
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { IMenuStack } from "../interfaces/StackInterface";
+import { IMainStack, IMenuStack } from "../interfaces/StackInterface";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 
-export default function Beranda({ route, navigation }: NativeStackScreenProps<IMenuStack, 'Beranda'>) {
-
-	const toast = useToast()
+export default function Beranda({ route, navigation }: NativeStackScreenProps<IMainStack, 'Home'>) {
 
 	return (
 		<>
@@ -103,41 +101,53 @@ export default function Beranda({ route, navigation }: NativeStackScreenProps<IM
 								</Text>
 								<HStack space={9}>
 									<VStack alignItems={"center"}>
-										<Center h={50} w={50} p={0}>
-											<Image source={require('../assets/icons/financial.png')} />
-										</Center>
+										<Pressable onPress={() => navigation.push("Perkara")}>
+											<Center h={50} w={50} p={0}>
+												<Image source={require('../assets/icons/financial.png')} />
+											</Center>
+										</Pressable>
 										<Text fontSize={12} color={"violet.500"}>Perkara</Text>
 									</VStack>
 									<VStack alignItems={"center"}>
-										<Center h={50} w={50} p={0}>
-											<Image source={require('../assets/icons/event.png')} />
-										</Center>
+										<Pressable onPress={() => navigation.push("JadwalSidang")}>
+											<Center h={50} w={50} p={0}>
+												<Image source={require('../assets/icons/event.png')} />
+											</Center>
+										</Pressable>
 										<Text fontSize={12} color={"violet.500"}>Sidang</Text>
 									</VStack>
 									<VStack alignItems={"center"}>
-										<Center h={50} w={50} p={0}>
-											<Image source={require('../assets/icons/company.png')} />
-										</Center>
+										<Pressable onPress={() => navigation.push("Keuangan")}>
+											<Center h={50} w={50} p={0}>
+												<Image source={require('../assets/icons/company.png')} />
+											</Center>
+										</Pressable>
 										<Text fontSize={12} color={"violet.500"}>Keungan</Text>
 									</VStack>
 									<VStack alignItems={"center"}>
-										<Center h={50} w={50} p={0}>
-											<Image source={require('../assets/icons/authorization.png')} />
-										</Center>
+										<Pressable onPress={() => navigation.push("AktaCerai")}>
+											<Center h={50} w={50} p={0}>
+												<Image source={require('../assets/icons/authorization.png')} />
+											</Center>
+										</Pressable>
 										<Text fontSize={12} color={"violet.500"}>Produk</Text>
 									</VStack>
 								</HStack>
 								<HStack space={9}>
 									<VStack alignItems={"center"}>
-										<Center h={50} w={50} p={0}>
-											<Image source={require('../assets/icons/require.png')} />
-										</Center>
+										<Pressable onPress={() => navigation.push("Pendaftaran")}>
+											<Center h={50} w={50} p={0}>
+												<Image source={require('../assets/icons/require.png')} />
+											</Center>
+										</Pressable>
 										<Text fontSize={12} color={"violet.500"}>Pendaftaran</Text>
 									</VStack>
 									<VStack alignItems={"center"}>
-										<Center h={50} w={50} p={0}>
-											<Image source={require('../assets/icons/project.png')} />
-										</Center>
+										<Pressable onPress={() => navigation.navigate("Saksi")}>
+											<Center h={50} w={50} p={0}>
+												<Image source={require('../assets/icons/project.png')} />
+											</Center>
+										</Pressable>
 										<Text fontSize={12} color={"violet.500"}>Saksi</Text>
 									</VStack>
 									<VStack alignItems={"center"}>

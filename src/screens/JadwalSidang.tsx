@@ -1,13 +1,13 @@
 import * as React from "react";
-import { View, Text, Badge, Box, Flex, HStack, Pressable, Spacer, Center, Hidden, Image, Stack, VStack, ScrollView, StatusBar, Divider } from "native-base";
+import { Text, Badge, Box, HStack, Spacer, Hidden, Stack, VStack, ScrollView, StatusBar, Divider } from "native-base";
 
 import useHttp from "../hooks/useHttp";
 import { ISidangResponse } from "../interfaces/ResponseInterface";
 import { useFocusEffect } from "@react-navigation/native";
 import { Alert, ImageBackground } from "react-native";
-import Splash from "./Splash";
 import { dateDiff, localDate } from "../utility/Dates";
 import { useNavigation } from "@react-navigation/native";
+import ScreenLoading from "../components/ScreenLoading";
 
 export default function JadwalSidang({ props }: any) {
 	const { data, loading, error, errorMessage } = useHttp<ISidangResponse[]>('user/jadwal_sidang');
@@ -31,7 +31,11 @@ export default function JadwalSidang({ props }: any) {
 			<StatusBar
 				translucent
 				backgroundColor="transparent"
-				barStyle="dark-content"
+				barStyle="light-content"
+			/>
+			<Box
+				safeAreaTop
+				backgroundColor="#694CBD"
 			/>
 			<ImageBackground
 				source={require('../assets/images/backgrounds/bg_gradient_blue.png')}
@@ -44,7 +48,7 @@ export default function JadwalSidang({ props }: any) {
 					flex={{ base: "1", md: "none" }}
 				>
 					<Hidden from="md">
-						<VStack px="4" mt="4" mb="5" space="2">
+						<VStack px="4" mt="12" mb="5" space="2">
 							<Text color="coolGray.50" fontSize="lg">
 								Jadwal Sidang
 							</Text>
@@ -72,47 +76,32 @@ export default function JadwalSidang({ props }: any) {
 							borderBottomRightRadius={{ base: "0", md: "xl" }}
 							borderTopLeftRadius={{ base: "2xl", md: "0" }}
 						>
-							{loading ? <Splash /> : (data?.map((row, i) => {
-								return <Box key={++i} alignItems="center">
-									<Pressable >
-										{({
-											isHovered,
-											isFocused,
-											isPressed
-										}) => {
-											return <Box width={350} bg={isPressed ? "coolGray.200" : isHovered ? "coolGray.200" : "coolGray.100"} style={{
-												transform: [{
-													scale: isPressed ? 0.96 : 1
-												}]
-											}} p="5" rounded="8" shadow={3} borderWidth="1" borderColor="coolGray.300">
-												<HStack alignItems="center">
-													<Badge colorScheme={dateDiff(new Date(), row.tanggal_sidang) <= 0 ? "success" : "danger"} _text={{
-														color: "white"
-													}} variant="solid" rounded="4">
-														{dateDiff(new Date(), row.tanggal_sidang) <= 0 ? 'Yang Akan Datang' : 'Berlalu'}
-													</Badge>
-													<Spacer />
-													<Text fontSize={10} color="coolGray.800">
-														{localDate(row.tanggal_sidang)}
-													</Text>
-												</HStack>
-												<Text color="coolGray.800" mt="3" fontWeight="medium" fontSize="xl">
-													{row.agenda}
-												</Text>
-												<Text mt="2" fontSize="sm" color="coolGray.700">
-													Ruangan : Ruang Sidang {row.ruangan}
-												</Text>
-												<Text fontSize="sm" color="coolGray.700">
-													Alasan Tunda : {row.alasan_ditunda == 0 ? 'Tidak Ditunda' : row.alasan_ditunda}
-												</Text>
-											</Box>;
-										}}
-									</Pressable>
+							{loading ? <ScreenLoading /> : (data?.map((row, i) => {
+								return <Box key={++i} width={350} p="5" rounded="8" borderWidth="1" borderColor="coolGray.300">
+									<HStack alignItems="center">
+										<Badge colorScheme={dateDiff(new Date(), row.tanggal_sidang) <= 0 ? "success" : "danger"} _text={{
+											color: "white"
+										}} variant="solid" rounded="4">
+											{dateDiff(new Date(), row.tanggal_sidang) <= 0 ? 'Yang Akan Datang' : 'Berlalu'}
+										</Badge>
+										<Spacer />
+										<Text fontSize={10} color="coolGray.800">
+											{localDate(row.tanggal_sidang)}
+										</Text>
+									</HStack>
+									<Text color="coolGray.800" mt="3" fontWeight="medium" fontSize="xl">
+										{row.agenda}
+									</Text>
+									<Text mt="2" fontSize="sm" color="coolGray.700">
+										Ruangan : Ruang Sidang {row.ruangan}
+									</Text>
+									<Text fontSize="sm" color="coolGray.700">
+										Alasan Tunda : {row.alasan_ditunda == 0 ? 'Tidak Ditunda' : row.alasan_ditunda}
+									</Text>
 								</Box>
 							}))
 
 							}
-							<Divider mt={20} />
 						</VStack>
 					</ScrollView>
 				</Stack>

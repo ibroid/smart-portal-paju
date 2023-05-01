@@ -1,59 +1,98 @@
 import * as React from "react";
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Beranda from "../screens/Beranda";
-import Umum from "../screens/Umum";
-import Perkara from "../screens/Perkara";
-import JadwalSidang from "../screens/JadwalSidang";
-import Keuangan from "../screens/Keuangan";
-import AktaCerai from "../screens/AktaCerai";
-import Survey from "../screens/Survey";
-import PengisianSurvey from "../screens/PengisianSurvey";
-import Pendaftaran from "../screens/Pendaftaran";
-import HitungBiaya from "../screens/HitungBiaya";
-import SidangKeliling from "../screens/SidangKeliling";
-import Profil from "../screens/Profil";
-import { IMenuStack } from "../interfaces/StackInterface";
+import { IMainStack } from "../interfaces/StackInterface";
 import IonIcon from "react-native-vector-icons/Ionicons"
-import { IconButton } from "native-base";
-const Stack = createNativeStackNavigator<IMenuStack>();
+import { useToast, Pressable, View } from "native-base";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import AmbilAntrian from "../screens/AmbilAntrian";
+import Antrian from "../screens/Antrian";
+import AntrianSidang from "../screens/AntrianSidang";
+import Settings from "../screens/Settings";
+
+const Tab = createBottomTabNavigator<IMainStack>();
 
 export default function BerandaStack() {
+	const toast = useToast();
+
+	const CustomTabBarButton = ({ children, onPress }: any) => {
+		return <Pressable
+
+			style={{
+				top: -20,
+				justifyContent: 'center',
+				alignItems: 'center',
+			}}
+			onPress={() => {
+				return toast.show({
+					title: 'Peringatan',
+					description: 'Pengambilan antrian secara online belum dibuka',
+					variant: 'solid',
+					backgroundColor: 'red.500',
+					placement: 'top',
+				})
+			}}
+		>
+			{({ isPressed }) => (<View
+				style={{
+					backgroundColor: '#694CBD',
+					width: 60,
+					height: 60,
+					borderRadius: 35,
+					transform: [{
+						scale: isPressed ? 0.96 : 1
+					}]
+				}}
+			>
+				{children}
+			</View>
+			)}
+
+		</Pressable>
+	}
 	return (
-		<Stack.Navigator>
-			<Stack.Screen options={{ headerShown: false }} name="Beranda" component={Beranda} />
-			<Stack.Screen name="Umum" component={Umum} />
-			<Stack.Screen name="Perkara" component={Perkara} />
-			<Stack.Screen name="JadwalSidang" component={JadwalSidang} />
-			<Stack.Screen name="Keuangan" component={Keuangan} />
-			<Stack.Screen name="AktaCerai" component={AktaCerai} />
-			<Stack.Screen name="Survey" component={Survey} />
-			<Stack.Screen name="PengisianSurvey" component={PengisianSurvey} />
-			<Stack.Screen name="Pendaftaran" component={Pendaftaran} />
-			<Stack.Screen name="HitungBiaya" component={HitungBiaya} />
-			<Stack.Screen name="SidangKeliling" component={SidangKeliling} />
-			<Stack.Screen
-				options={
-					({ navigation, route }) => ({
-						title: "", headerTransparent: true, headerLeft: () => (
-							<IconButton
-								p={1}
-								borderRadius="full"
-								icon={<IonIcon color={"#fff"} size={30} name={"chevron-back"} />}
-								_pressed={{
-									bg: 'coolGray.800:alpha.20',
-									_ios: {
-										_icon: {
-											size: '2xl'
-										}
-									}
-								}}
-								onPress={() => navigation.goBack()}
-							/>
-						)
-					})
+		<Tab.Navigator
+			screenOptions={({ route }) => ({
+				tabBarActiveTintColor: '#694CBD',
+				tabBarInactiveTintColor: '#694CBD',
+				headerShown: false,
+				tabBarShowLabel: false,
+				tabBarStyle: {
+					position: 'absolute',
+					height: 55,
+					bottom: 15,
+					marginHorizontal: 50,
+					borderRadius: 15
+
+				},
+			})}
+		>
+			<Tab.Screen name="Home" component={Beranda} options={{
+				tabBarLabel: "Home",
+				tabBarIcon: ({ focused, color, size }) => {
+					return <IonIcon size={size} color={color} name={focused ? 'grid' : 'grid-outline'} />
 				}
-				name="Profil"
-				component={Profil} />
-		</Stack.Navigator>
+			}} />
+			<Tab.Screen name="Persidangan" component={AntrianSidang} options={{
+				tabBarIcon: ({ focused, color, size }) => {
+					return <IonIcon size={size} color={color} name={focused ? 'people' : 'people-outline'} />
+				}
+			}} />
+			<Tab.Screen name="AmbilAntrian" component={AmbilAntrian} options={{
+				tabBarIcon: ({ size }) => <IonIcon size={size} color={"#fff"} name="qr-code-outline" />,
+				tabBarButton: (props) => {
+					return CustomTabBarButton(props);
+				}
+			}} />
+			<Tab.Screen name="Antrian" component={Antrian} options={{
+				tabBarIcon: ({ focused, color, size }) => {
+					return <IonIcon size={size} color={color} name={focused ? 'easel' : 'easel-outline'} />
+				}
+			}} />
+			<Tab.Screen name="Settings" component={Settings} options={{
+				tabBarIcon: ({ focused, color, size }) => {
+					return <IonIcon size={size} color={color} name={focused ? 'settings' : 'settings-outline'} />
+				}
+			}} />
+		</Tab.Navigator>
 	)
 }

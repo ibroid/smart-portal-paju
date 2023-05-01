@@ -17,3 +17,13 @@ export interface IPerkaraForm {
     tahunPerkara: string;
     jenisPerkara: string;
 }
+
+export interface ISaksiForm {
+    nama: string;
+    nik: string;
+    tempatLahir: string;
+    tanggalLahir: string;
+    alamat: string;
+    hubungan: string;
+    umur: number;
+}

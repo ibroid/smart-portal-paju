@@ -1,8 +1,9 @@
-import { View, Text, Box, Center, Hidden, HStack, Pressable, Stack, VStack, Spacer, Flex, Actionsheet, useDisclose, ScrollView, StatusBar, Divider } from "native-base";
+import { View, Text, Box, HStack, Stack, VStack, Actionsheet, useDisclose, ScrollView, StatusBar, Divider } from "native-base";
 import * as React from "react";
 import { ImageBackground, TouchableOpacity } from "react-native";
 import FaIcon from "react-native-vector-icons/FontAwesome5";
 import Timeline from "react-native-timeline-flatlist";
+import { namaSatker } from "../backend.json";
 
 export default function Pendaftaran() {
 	const {
@@ -13,27 +14,27 @@ export default function Pendaftaran() {
 
 	const [timelineData, setTImelineData] = React.useState([
 		{
-			time: <FaIcon name="file-alt" color={'#008080'} size={15} />,
+			time: <FaIcon name="file-alt" color={'#FFBF11'} size={15} />,
 			title: 'Memenuhi Persyaratan',
-			description: <View style={{ marginEnd: 20 }}><Text style={{ textAlign: 'justify' }}>Sebelum memulai pendaftaran perkara, Pihak Wajib memenuhi semua persyaratan sesuai jenis perkara yang akan di ajukan. Untuk melihat persyaratan pendaftaran silahkan </Text><TouchableOpacity onPress={onOpen}><Text style={{ color: '#008080', fontWeight: '500' }}>Klik Disini</Text></TouchableOpacity></View>
+			description: <View style={{ marginEnd: 20 }}><Text style={{ textAlign: 'justify' }}>Sebelum memulai pendaftaran perkara, Pihak Wajib memenuhi semua persyaratan sesuai jenis perkara yang akan di ajukan. Untuk melihat persyaratan pendaftaran silahkan </Text><TouchableOpacity onPress={onOpen}><Text style={{ color: '#FFBF11', fontWeight: '500' }}>Klik Disini</Text></TouchableOpacity></View>
 		},
 		{
-			time: <FaIcon name="pencil-alt" color={'#008080'} size={15} />,
+			time: <FaIcon name="pencil-alt" color={'#FFBF11'} size={15} />,
 			title: 'Membuat Gugatan atau Permohonan',
-			description: <View style={{ marginEnd: 20 }}><Text style={{ textAlign: 'justify' }}>Setelah Persyaratan terkumpul, Selanjutnya membuat surat gugatan atau surat permohonan. Surat ini termasuk kedalam persyaratan pendaftaran. Untuk membuat nya, anda bisa ke loket posbakum di kantor Pengadilan Cianjur (gratis)</Text></View>
+			description: <View style={{ marginEnd: 20 }}><Text style={{ textAlign: 'justify' }}>Setelah Persyaratan terkumpul, Selanjutnya membuat surat gugatan atau surat permohonan. Surat ini termasuk kedalam persyaratan pendaftaran. Untuk membuat nya, anda bisa ke loket posbakum di kantor {namaSatker} (gratis)</Text></View>
 		},
 		{
-			time: <FaIcon name="file-signature" color={'#008080'} size={15} />,
+			time: <FaIcon name="file-signature" color={'#FFBF11'} size={15} />,
 			title: 'Melakukan Pendaftaran',
 			description: <View style={{ marginEnd: 20 }}><Text style={{ textAlign: 'justify' }}> Setelah Persyaratan dan surat gugatan atau permohonan sudah terkumpul. Silahkan mengambil antrian pendaftaran dan memberikan semua dokumen persyaratan kepada petugas pendaftaran</Text></View>
 		},
 		{
-			time: <FaIcon name="money-bill-wave-alt" color={'#008080'} size={15} />,
+			time: <FaIcon name="money-bill-wave-alt" color={'#FFBF11'} size={15} />,
 			title: 'Melakukan Pembayaran',
 			description: <View style={{ marginEnd: 20 }}><Text style={{ textAlign: 'justify' }}>Petugas pendaftaran akan memandu ke loket bank dan silahkan melakukan pembayaran sesuai nominal yang telah di berikan oleh petugas pendaftaran. Setelah itu berikan struk pembayaran dari loket bank kepada petugas pendaftaran.'</Text></View>
 		},
 		{
-			time: <FaIcon name="user-tie" color={'#008080'} size={15} />,
+			time: <FaIcon name="user-tie" color={'#FFBF11'} size={15} />,
 			title: 'Pendaftaran Berhasil',
 			description: <View style={{ marginEnd: 20 }}><Text style={{ textAlign: 'justify' }}>Setelah pendaftaran berhasil silahkan ikuti intruksi dari petugas pendaftaran tentang cara berperkara, Silahkan tanyakan sesuatu yang belum dimengerti kepada petugas.</Text></View>
 		},
@@ -43,7 +44,11 @@ export default function Pendaftaran() {
 			<StatusBar
 				translucent
 				backgroundColor="transparent"
-				barStyle="dark-content"
+				barStyle="light-content"
+			/>
+			<Box
+				safeAreaTop
+				backgroundColor="#694CBD"
 			/>
 			<ImageBackground
 				source={require('../assets/images/backgrounds/bg_gradient_blue.png')}
@@ -55,9 +60,9 @@ export default function Pendaftaran() {
 					maxW={{ md: "1016px" }}
 					flex={{ base: "1", md: "none" }}
 				>
-					<HStack space="2" alignItems="center" m={2}>
+					<HStack space="2" mt={"12"} alignItems="center" m={2}>
 						<Text color="coolGray.50" fontSize="lg">
-							Berikut Adalah Alur Pendaftaran Perkara di Pengadilan Agama Cianjur Kelas 1A
+							Berikut Adalah Alur Pendaftaran Perkara di {namaSatker}
 						</Text>
 					</HStack>
 					<VStack
@@ -74,12 +79,11 @@ export default function Pendaftaran() {
 					>
 						<View style={{ flex: 1 }}>
 							<Timeline
-								circleColor={'#008080'}
+								circleColor={'#FFBF11'}
 								data={timelineData}
 								descriptionStyle={{ textAlign: 'justify', paddingRight: 20 }}
 								titleStyle={{ color: 'black' }} />
 						</View>
-						<Divider mt={20} />
 					</VStack>
 				</Stack>
 				<Actionsheet isOpen={isOpen} onClose={onClose}>

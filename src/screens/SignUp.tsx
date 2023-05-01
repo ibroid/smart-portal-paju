@@ -31,6 +31,7 @@ import * as qs from "qs";
 import { useForm } from "react-hook-form";
 import InputDefault from "../components/InputDefault";
 import SelectDefault from "../components/SelectDefault";
+import { IFormSignUp } from "../interfaces/FormInterface";
 
 
 
@@ -56,7 +57,7 @@ function SignUpForm({ props }: any) {
 		return arr;
 	});
 
-	const { handleSubmit, control } = useForm();
+	const { handleSubmit, control } = useForm<IFormSignUp>();
 
 	const submitForm = (data: any) => {
 
@@ -139,9 +140,18 @@ function SignUpForm({ props }: any) {
 					<VStack>
 						<VStack space="6">
 							<VStack space={{ base: "6", md: "4" }}>
-								<InputDefault control={control} name={"namaLengkap"} placeholder="Masukan Nama Lengkap" />
-								<InputDefault control={control} name={"nomorTelepon"} placeholder="Masukan Nomor Telepon. Contoh  08XXXX" />
-								<InputDefault control={control} name={"password"} placeholder="Masukan Nomor Password" isPass={true} />
+								<InputDefault placeholder="Masukan Nama Lengkap" controllerProp={{
+									name: "namaLengkap",
+									control: control
+								}} isPass={false} />
+								<InputDefault placeholder="Masukan Nomor Telepon. Contoh  08XXXX" controllerProp={{
+									name: "nomorTelepon",
+									control: control
+								}} isPass={false} />
+								<InputDefault placeholder="Masukan Nomor Password" isPass={true} controllerProp={{
+									name: "password",
+									control: control
+								}} />
 								<Checkbox
 									alignItems="flex-start"
 									onChange={(isSelected) => setSudahMendaftar(isSelected)}
@@ -173,21 +183,27 @@ function SignUpForm({ props }: any) {
 								</Checkbox>
 								{sudahDaftar ?
 									<VStack space={3}>
-										<InputDefault placeholder="Masukan Nomor Perkara (Awal nya saja)" name={"nomorPerkara"} control={control} />
+										<InputDefault
+											placeholder="Masukan Nomor Perkara (Awal nya saja)" controllerProp={{
+												name: "nomorPerkara",
+												control: control
+											}} isPass={false} />
 										<HStack space={6} direction="row">
 											<SelectDefault
-												control={control}
-												name="jenisPerkara"
 												placeholder="Jenis Perkara"
 												data={[
 													{ name: 'Pdt.P', value: 'Pdt.P' },
 													{ name: 'Pdt.G', value: 'Pdt.G' }
-												]} />
+												]} controllerProp={{
+													name: "jenisPerkara",
+													control: control
+												}} />
 											<SelectDefault
-												control={control}
-												name="tahunPerkara"
 												placeholder="Tahun Perkara"
-												data={years} />
+												data={years} controllerProp={{
+													name: "tahunPerkara",
+													control: control
+												}} />
 										</HStack>
 									</VStack> : <View></View>}
 

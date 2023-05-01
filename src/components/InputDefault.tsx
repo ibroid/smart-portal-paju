@@ -15,7 +15,8 @@ export default function InputDefault<T extends FieldValues>(props: {
 	return <Input
 		borderColor={"amber.500"}
 		colorScheme={"amber"}
-		color={"amber.500"}
+		color={"amber.600"}
+		width={"full"}
 		type={!props.isPass ? "text" : (invis ? "password" : "text")}
 		defaultValue={field.value}
 		onChangeText={field.onChange}

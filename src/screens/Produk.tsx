@@ -6,7 +6,7 @@ import { IAktaCeraiResponse } from "../interfaces/ResponseInterface";
 import { Alert, ImageBackground } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-export default function AktaCerai({ props }: any) {
+export default function Produk({ props }: any) {
 
 	const { data, loading, error, errorMessage } = useHttp<IAktaCeraiResponse>('user/akta_cerai');
 	const navigation = useNavigation();

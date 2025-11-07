@@ -9,6 +9,7 @@ export default function SelectDefault<T extends FieldValues>(props: {
     const { field } = useController(props.controllerProp);
     return <Select
         selectedValue={field.value}
+        width={150}
         placeholder={props.placeholder}
         onValueChange={field.onChange}>
         {props.data.map((row, i) => (<Select.Item key={++i} label={row.name} value={row.value} />))}

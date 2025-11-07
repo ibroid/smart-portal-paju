@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { Alert, ImageBackground, InteractionManager, View } from "react-native";
+/* eslint-disable prettier/prettier */
+import React, { useMemo, useState } from "react";
+import { ImageBackground, InteractionManager, View } from "react-native";
 import { useFocusEffect } from '@react-navigation/native';
 import {
 	Button,
@@ -21,7 +22,6 @@ import {
 
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { kodeSatker } from "../backend.json";
 import { AuthContext } from "../context/AuthContext";
 import { AxiosError, AxiosResponse } from "axios";
 import { IRegisterResponse } from "../interfaces/ResponseInterface";
@@ -32,6 +32,7 @@ import { useForm } from "react-hook-form";
 import InputDefault from "../components/InputDefault";
 import SelectDefault from "../components/SelectDefault";
 import { IFormSignUp } from "../interfaces/FormInterface";
+import { KODE_SATKER } from "@env";
 
 
 
@@ -39,14 +40,14 @@ function SignUpForm({ props }: any) {
 
 	const { authContext } = React.useContext(AuthContext);
 	const toast = useToast();
-	const [sudahDaftar, setSudahMendaftar] = useState<boolean>(false);
+
 	const [loading, setLoading] = useState<boolean>(false);
 
-	const [years, setYears] = React.useState<any[]>(() => {
+	const years = useMemo(() => {
 		const date = new Date();
 		const arr: any[] = [{
-			name: '2023',
-			value: '2023'
+			name: date.getFullYear().toString(),
+			value: date.getFullYear().toString()
 		}];
 		for (let i = 1; i < 7; i++) {
 			arr.push({
@@ -55,7 +56,7 @@ function SignUpForm({ props }: any) {
 			});
 		}
 		return arr;
-	});
+	}, []);
 
 	const { handleSubmit, control } = useForm<IFormSignUp>();
 
@@ -66,7 +67,7 @@ function SignUpForm({ props }: any) {
 		HttpRequest.request.post('auth/register', qs.stringify({
 			phone: data.nomorTelepon,
 			password: data.password,
-			nomor_perkara: `${data.nomorPerkara}/${data.jenisPerkara}/${data.tahunPerkara}/${kodeSatker}`,
+			nomor_perkara: `${data.nomorPerkara}/${data.jenisPerkara}/${data.tahunPerkara}/${KODE_SATKER}`,
 			name: data.namaLengkap
 		}))
 			.then((res: AxiosResponse<IRegisterResponse>) => {
@@ -74,7 +75,7 @@ function SignUpForm({ props }: any) {
 					title: 'Notifikasi',
 					description: res.data.message + '. Anda akan diarahkan sebentar lagi.',
 					duration: 3000,
-					bgColor: "amber.500",
+					bgColor: "#F8B94F",
 					onCloseComplete() {
 						authContext.signUp(res.data.token);
 					}
@@ -152,60 +153,32 @@ function SignUpForm({ props }: any) {
 									name: "password",
 									control: control
 								}} />
-								<Checkbox
-									alignItems="flex-start"
-									onChange={(isSelected) => setSudahMendaftar(isSelected)}
-									isChecked={sudahDaftar}
-									value="demo"
-									colorScheme={"warning"}
-									accessibilityLabel="Remember me"
-								>
-									<HStack alignItems="center">
-										<Text fontSize="sm" color="coolGray.400" pl="2">
-											Saya Sudah Mempunyai{" "}
-										</Text>
-										<Link
-											_text={{
-												fontSize: "sm",
-												fontWeight: "semibold",
-												textDecoration: "none",
-											}}
-											_light={{
-												_text: {
-													color: "amber.500",
-												},
-											}}
-											onPress={() => console.log('ok')}
-										>
-											Nomor Perkara
-										</Link>
-									</HStack>
-								</Checkbox>
-								{sudahDaftar ?
-									<VStack space={3}>
-										<InputDefault
-											placeholder="Masukan Nomor Perkara (Awal nya saja)" controllerProp={{
-												name: "nomorPerkara",
+								<VStack space={3}>
+									<InputDefault
+										placeholder="Masukan Nomor Perkara (Awal nya saja)" controllerProp={{
+											name: "nomorPerkara",
+											control: control
+										}} isPass={false} />
+									<HStack space={4} width={"full"} direction="row">
+										<SelectDefault
+											placeholder="Jenis Perkara"
+											data={[
+												{ name: 'Pdt.P', value: 'Pdt.P' },
+												{ name: 'Pdt.G', value: 'Pdt.G' }
+											]}
+											controllerProp={{
+												name: "jenisPerkara",
 												control: control
-											}} isPass={false} />
-										<HStack space={6} direction="row">
-											<SelectDefault
-												placeholder="Jenis Perkara"
-												data={[
-													{ name: 'Pdt.P', value: 'Pdt.P' },
-													{ name: 'Pdt.G', value: 'Pdt.G' }
-												]} controllerProp={{
-													name: "jenisPerkara",
-													control: control
-												}} />
-											<SelectDefault
-												placeholder="Tahun Perkara"
-												data={years} controllerProp={{
-													name: "tahunPerkara",
-													control: control
-												}} />
-										</HStack>
-									</VStack> : <View></View>}
+											}} />
+										<SelectDefault
+											placeholder="Tahun Perkara"
+											data={years}
+											controllerProp={{
+												name: "tahunPerkara",
+												control: control
+											}} />
+									</HStack>
+								</VStack>
 
 							</VStack>
 							<Button
@@ -218,10 +191,10 @@ function SignUpForm({ props }: any) {
 									fontWeight: "medium",
 								}}
 								_light={{
-									bg: "amber.500",
+									bg: "#F8B94F",
 								}}
 								_dark={{
-									bg: "amber.700"
+									bg: "#F8B94F"
 								}}
 								onPress={handleSubmit(submitForm, () => {
 									toast.show({
@@ -271,7 +244,7 @@ export default function SignUp(props: any) {
 			/>
 			<ImageBackground
 				source={require('../assets/images/backgrounds/bg_gradient_blue.png')}
-				style={{ flex: 1, marginHorizontal: "auto" }}
+				style={{ flex: 1 }}
 			>
 				<Stack
 					flexDirection={{ base: "column", md: "row" }}

@@ -94,14 +94,21 @@ export function SignInForm({ props }: any) {
 			>
 				<VStack space="2">
 					<VStack space={{ base: "5", md: "4" }}>
-						<InputDefault placeholder="Masukan Nomor Telepon" controllerProp={{
-							name: "nomorTelepon",
-							control: control
-						}} isPass={false} />
-						<InputDefault placeholder="Masukan Password" isPass={true} controllerProp={{
-							name: "password",
-							control: control
-						}} />
+						<InputDefault
+							placeholder="Masukan Nomor Telepon"
+							controllerProp={{
+								name: "nomorTelepon",
+								control: control
+							}}
+							isPass={false} />
+
+						<InputDefault
+							placeholder="Masukan Password"
+							isPass={true}
+							controllerProp={{
+								name: "password",
+								control: control
+							}} />
 					</VStack>
 					<Button
 						onPress={handleSubmit(submitLogin, () => {
@@ -116,14 +123,11 @@ export function SignInForm({ props }: any) {
 						isLoadingText="Mohon Tunggu"
 						mt="5"
 						size="md"
+						_light={{ color: "#F8B94F" }}
 						borderRadius="4"
 						_text={{
 							fontWeight: "medium",
-						}}
-						_light={{
-							bg: "amber.500",
-						}}
-					>
+						}}>
 						MASUK
 					</Button>
 
@@ -149,7 +153,7 @@ export function SignInForm({ props }: any) {
 						}}
 						_light={{
 							_text: {
-								color: "amber.600",
+								color: "#F8B94F",
 							},
 						}}
 						_dark={{
@@ -182,7 +186,7 @@ export default function SignIn(props: any) {
 			/>
 			<ImageBackground
 				source={require('../assets/images/backgrounds/bg_gradient_blue.png')}
-				style={{ flex: 1, marginHorizontal: "auto" }}
+				style={{ flex: 1 }}
 			>
 				<Stack
 					flexDirection={{ base: "column", md: "row" }}

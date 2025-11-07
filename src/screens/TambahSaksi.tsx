@@ -8,15 +8,21 @@ import { useForm } from "react-hook-form";
 import InputDefault from "../components/InputDefault";
 import { ISaksiForm } from "../interfaces/FormInterface";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import HttpRequest from "../utility/HttpRequest";
+import HttpRequest from '../utility/HttpRequest';
 import { AuthContext } from "../context/AuthContext";
 import QueryString from "qs";
+import { AxiosResponse } from "axios";
+import { ISaksiResponse } from "../interfaces/ResponseInterface";
+import DatePicker from 'react-native-date-picker'
 
 export default function TambahSaksi({ route, navigation }: NativeStackScreenProps<ISaksiStack, "TambahSaksi">) {
 
 	const { control, handleSubmit } = useForm<ISaksiForm>();
 	const { state } = React.useContext(AuthContext);
+
 	const toast = useToast();
+	const [modalDate, setModalDate] = React.useState<boolean>(false);
+	const [selectedDate, setSelectedDate] = React.useState<Date>(new Date);
 
 	const SaveDataSaksi = React.useCallback((data: ISaksiForm) => {
 
@@ -24,8 +30,10 @@ export default function TambahSaksi({ route, navigation }: NativeStackScreenProp
 
 		HttpRequest.setHeaderXForm();
 		HttpRequest.setAuthorizationToken(state.userToken!);
-		HttpRequest.request.post('/saksi', data)
-			.then()
+		HttpRequest.request.post('/saksi', body)
+			.then((response: AxiosResponse<ISaksiResponse>) => {
+
+			})
 			.catch()
 
 
@@ -101,11 +109,20 @@ export default function TambahSaksi({ route, navigation }: NativeStackScreenProp
 									rules: { required: true },
 									control: control
 								}} isPass={false} placeholder={"Tempat Lahir Saksi"} />
-								<InputDefault controllerProp={{
+
+								{/* <InputDefault controllerProp={{
 									name: "tanggalLahir",
 									rules: { required: true },
-									control: control
-								}} isPass={false} placeholder={"Tanggal Lahir Saksi"} />
+									control: control,
+								}} isPass={false} placeholder={"Tanggal Lahir Saksi"} /> */}
+
+								<Text color={"gray.500"} mt={3} fontSize={12}>Tanggal Lahir Saksi</Text>
+
+								<Button size={"sm"} width={40} onPress={() => setModalDate(true)}>Pilih Tanggal</Button>
+
+								<DatePicker title={"Pilih Tanggal"} modal open={modalDate} locale={"id"} mode="date" date={selectedDate} onDateChange={(value) => {
+									console.log(value)
+								}} />
 								<InputDefault controllerProp={{
 									name: "alamat",
 									rules: { required: true },
@@ -120,7 +137,7 @@ export default function TambahSaksi({ route, navigation }: NativeStackScreenProp
 									onPress={handleSubmit(SaveDataSaksi, (errors) => {
 										toast.show({
 											title: 'Terjadi Kesalahan',
-											description: 'Silahkan Lengkapi Form',
+											description: 'Silahkan Lengkapi Form. Error : ' + errors,
 											duration: 2000,
 											bgColor: "red.500"
 										})

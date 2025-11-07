@@ -6,24 +6,26 @@ import { IAktaCeraiResponse } from "../interfaces/ResponseInterface";
 import { Alert, ImageBackground } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { IMainStack, ISaksiStack } from "../interfaces/StackInterface";
+
 import IonIcon from "react-native-vector-icons/Ionicons";
 
 export default function Saksi({ route, navigation }: NativeStackScreenProps<ISaksiStack, "DaftarSaksi">) {
 
-	const { data, loading, error, errorMessage } = useHttp<IAktaCeraiResponse>('user/akta_cerai');
-	useFocusEffect(React.useCallback(() => {
+	// const { data, loading, error, errorMessage } = useHttp<IAktaCeraiResponse>('user/akta_cerai');
 
-		if (error && errorMessage) {
-			Alert.alert("Terjadi Kesalahan", "Mohon maaf saat ini layanan cek biaya tidak bisa diakses. Error : " + errorMessage.message, [
-				{
-					"text": "Kembali",
-					"onPress": () => navigation.goBack()
-				}
-			])
-		}
+	// useFocusEffect(React.useCallback(() => {
+
+	// 	if (error && errorMessage) {
+	// 		Alert.alert("Terjadi Kesalahan", "Mohon maaf saat ini layanan cek biaya tidak bisa diakses. Error : " + errorMessage.message, [
+	// 			{
+	// 				"text": "Kembali",
+	// 				"onPress": () => navigation.goBack()
+	// 			}
+	// 		])
+	// 	}
 
 
-	}, [loading]))
+	// }, [loading]))
 	return (
 		<>
 			<StatusBar

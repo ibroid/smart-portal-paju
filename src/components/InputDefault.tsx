@@ -1,6 +1,6 @@
-import { Icon, Input, Pressable } from "native-base";
+import { Input, Pressable, View } from "native-base";
 import { useState } from "react";
-import { Control, FieldValues, UseControllerProps, useController } from "react-hook-form";
+import { FieldValues, UseControllerProps, useController } from "react-hook-form";
 import IonIcon from "react-native-vector-icons/Ionicons";
 
 export default function InputDefault<T extends FieldValues>(props: {
@@ -23,8 +23,8 @@ export default function InputDefault<T extends FieldValues>(props: {
 		variant="underlined"
 		InputRightElement={props.isPass
 			? <Pressable mr={2} onPress={() => setInvis(prev => !prev)}>
-				<IonIcon size={20} color={"amber.500"} name={invis ? "eye-off" : "eye"} />
+				<IonIcon size={20} color={"#F8B94F"} name={invis ? "eye-off" : "eye"} />
 			</Pressable>
-			: <></>}
+			: <View></View>}
 		placeholder={props.placeholder} />;
 }
